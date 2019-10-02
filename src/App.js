@@ -47,12 +47,14 @@ class App extends Component {
                 <Route 
                   path='/' 
                   exact 
-                  render={ () => <EventsList {...this.state} /> }
+                  //render={ () => <EventsList {...this.state} /> }
+                  render={ () => <EventsList events={ this.state.events } /> }
                 />
 
                 <Route
                   path="/event/:id" 
                   component={Event}
+                  //render={ () => <Event events={ this.state.events } /> }
                 />
                 
               </div>
