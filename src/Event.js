@@ -6,14 +6,14 @@ class Event extends React.Component {
         super(props);
 
         console.log("props are: ", props);
-        const albumID = this.props.match.params.id;
-        console.log("albumID is: ", albumID);
+        const eventID = this.props.match.params.id;
+        console.log("eventID is: ", eventID);
     }
 
     render() {
         return (
             <div>
-                Event ID is { this.albumID }
+                Event ID is { this.eventID }
 
                 <hr />
                 <Link to='/'>Back to Event List</Link>
