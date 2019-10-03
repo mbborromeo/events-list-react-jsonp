@@ -21,23 +21,23 @@ class Event extends React.Component {
         {
             timeout: 2000,
             params: {
-            api: 'cc1-0befd4410327ac7b8c7f88e4ed466e87d6f78eff29de81c3ee4e28d79b604eb2-0c75664d5c8211b4395e7f766a415a25827c7cf2'
+              api: 'cc1-0befd4410327ac7b8c7f88e4ed466e87d6f78eff29de81c3ee4e28d79b604eb2-0c75664d5c8211b4395e7f766a415a25827c7cf2'
             }
         })
         .then( response => {
             console.log(response);
 
-            this.setState(
+              this.setState(
                 {
-                    event: response.data,
-                    loading: false,
+                  event: response.data,
+                  loading: false,
                 }
-            );
+              );
             }
         )
         .catch( function (error) {
             console.log(error);
-            }
+          }
         );
     }
 
@@ -64,13 +64,12 @@ class Event extends React.Component {
                     <div>
                         { this.state.event.name &&
                             <div>
-                                Event name: { this.state.event.name }<br />
-                            </div>
-                        }
-
-                        { this.state.event.id &&
-                            <div>
-                                ID: { this.state.event.id }<br />
+                                { this.state.event.name }
+                                { this.state.event.id &&
+                                    <span>
+                                        { ' (ID: ' + this.state.event.id + ')' }<br />
+                                    </span>
+                                }
                             </div>
                         }
 
@@ -91,18 +90,11 @@ class Event extends React.Component {
                             </div>
                         }
 
-                        { this.state.event.thumbnail_image_url &&
-                            <div>
-                                thumbnail_image_url: 
-                                <img src={ this.state.event.thumbnail_image_url } />
-                            </div>
-                        }
-
                         { this.state.event.time_start &&
                             <div>
-                                time_start: 
+                                From: 
                                 { 
-                                    new Date(this.state.event.time_start).getDate() + '-' + 
+                                    ' ' + new Date(this.state.event.time_start).getDate() + '-' + 
                                     (new Date(this.state.event.time_start).getMonth()+1) + '-' + 
                                     new Date(this.state.event.time_start).getFullYear() + ', ' + 
                                     new Date(this.state.event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' 
@@ -113,9 +105,9 @@ class Event extends React.Component {
 
                         { this.state.event.time_stop &&
                             <div>
-                                time_stop: 
+                                To: 
                                 { 
-                                    new Date(this.state.event.time_stop).getDate() + '-' + 
+                                    ' ' + new Date(this.state.event.time_stop).getDate() + '-' + 
                                     (new Date(this.state.event.time_stop).getMonth()+1) + '-' + 
                                     new Date(this.state.event.time_stop).getFullYear() + ', ' + 
                                     new Date(this.state.event.time_stop).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' '
@@ -127,6 +119,12 @@ class Event extends React.Component {
                         { this.state.event.location && this.state.event.location.name &&
                             <div>
                                 location.name: { this.state.event.location.name }<br />
+                            </div>
+                        }
+                        
+                        { this.state.event.thumbnail_image_url &&
+                            <div>
+                                <img src={ this.state.event.thumbnail_image_url } />
                             </div>
                         }
 
