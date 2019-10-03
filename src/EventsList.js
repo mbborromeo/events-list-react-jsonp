@@ -66,7 +66,6 @@ class EventsList extends React.Component {
 
     handleNextClick() {
         console.log('Click Next happened');
-
         let proposedPage = this.state.currentPage + 1;
 
         if(proposedPage <= this.state.totalPages) {
@@ -79,25 +78,31 @@ class EventsList extends React.Component {
             //update in componentDidUpdate            
         }
     }
-
-    handleBeginningClick() {
-        console.log('Click Start happened');
-       
-        this.setState(
-            {
-                currentPage: 1,
-            }
-        );
-    }
-
+    
     handleEndClick() {
         console.log('Click End happened');
+        let proposedPage = this.state.totalPages;
        
-        this.setState(
-            {
-                currentPage: this.state.totalPages,
-            }
-        );
+        if( this.state.currentPage !== proposedPage ) {
+            this.setState(
+                {
+                    currentPage: proposedPage,
+                }
+            );
+        }
+    }
+
+    handleBeginningClick() {        
+        let proposedPage = 1;
+
+        if( this.state.currentPage !== proposedPage ) {
+            console.log('Click Start happened');
+            this.setState(
+                {
+                    currentPage: proposedPage,
+                }
+            );
+        }
     }
 
     handlePrevClick() {
