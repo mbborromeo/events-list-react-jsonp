@@ -8,12 +8,10 @@ class Event extends React.Component {
         event: [],
     }
 
-    /*
     constructor(props) {
         super(props);
         console.log("props are: ", props);        
     }
-    */
 
     componentDidMount() {
         const eventID = this.props.match.params.id;
