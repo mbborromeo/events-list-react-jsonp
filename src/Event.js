@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios-jsonp-pro';
+import { Link } from 'react-router-dom';
 
 class Event extends React.Component {
     state = {
         loading: true,
-        event: [],
+        event: [],        
     }
 
     constructor(props) {
         super(props);
-        console.log("props are: ", props);        
+        console.log("props are: ", props);
+        console.log("state.event is: ", this.state.event);
     }
 
     componentDidMount() {
         const eventID = this.props.match.params.id;
-        console.log("eventID is: ", eventID);
 
         //call API to get Details for Event with eventID and save this in State event
         axios.jsonp(`https://demo1-webservice.eventbase.com/v4/admin/events/frontendcodechallenge/sessions/${ eventID }`, 
@@ -48,9 +48,61 @@ class Event extends React.Component {
                 { this.state.loading ?
                     <div>Loading event</div> :
                     <div>
-                        Event name is { this.state.event.name }
+                        { //this.state.event.name &&
+                            <div>
+                                Event name: { this.state.event.name }<br />
+                            </div>
+                        }
 
-                        <hr />
+                        { //this.state.event.id &&
+                            <div>
+                                ID: { this.state.event.id }<br />
+                            </div>
+                        }
+
+                        { //this.state.event.description &&
+                            <div>
+                                Description: { this.state.event.description }<br />
+                            </div>
+                        }
+
+                        LOOP THIS categories[i].name: this.state.event.categories[0].name <br />
+
+                        { //this.state.event.thumbnail_image_url &&
+                            <div>
+                                thumbnail_image_url: { this.state.event.thumbnail_image_url }<br />
+                            </div>
+                        }
+
+                        { //this.state.event.time_start &&
+                            <div>
+                                time_start: 
+                                { new Date(this.state.event.time_start).getDate() + '-' } 
+                                { new Date(this.state.event.time_start).getMonth()+1 + '-' }
+                                { new Date(this.state.event.time_start).getFullYear() + ', ' }
+                                { new Date(this.state.event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' }
+                                <br />
+                            </div>
+                        }
+
+                        { //this.state.event.time_stop &&
+                            <div>
+                                time_stop: 
+                                { new Date(this.state.event.time_stop).getDate() + '-' } 
+                                { new Date(this.state.event.time_stop).getMonth()+1 + '-' }
+                                { new Date(this.state.event.time_stop).getFullYear() + ', ' }
+                                { new Date(this.state.event.time_stop).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' }
+                                <br />
+                            </div>
+                        }
+
+                        { //this.state.event.location &&
+                            <div>
+                                location.name: { this.state.event.location }<br />
+                            </div>
+                        }
+
+                        <br /><br />
                         <Link to='/'>Back to Event List</Link>
                     </div>
                 }
