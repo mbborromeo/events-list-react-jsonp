@@ -62,50 +62,64 @@ class Event extends React.Component {
                 { this.state.loading ?
                     <div>Loading event</div> :
                     <div>
-                        { //this.state.event.name &&
+                        { this.state.event.name &&
                             <div>
                                 Event name: { this.state.event.name }<br />
                             </div>
                         }
 
-                        { //this.state.event.id &&
+                        { this.state.event.id &&
                             <div>
                                 ID: { this.state.event.id }<br />
                             </div>
                         }
 
-                        { //this.state.event.description &&
+                        { this.state.event.description &&
                             <div>
                                 Description: { this.state.event.description }<br />
                             </div>
                         }
-
-                        LOOP THIS categories[i].name: this.state.event.categories[0].name <br />
-
-                        { //this.state.event.thumbnail_image_url &&
+                        
+                        { this.state.event.categories && this.state.event.categories.length>0 &&
                             <div>
-                                thumbnail_image_url: { this.state.event.thumbnail_image_url }<br />
+                                Categories: 
+                                {
+                                    this.state.event.categories.map(
+                                        (category) => <span key={ category.id }>{ category.name + ' ' }</span>
+                                    )
+                                }
                             </div>
                         }
 
-                        { //this.state.event.time_start &&
+                        { this.state.event.thumbnail_image_url &&
+                            <div>
+                                thumbnail_image_url: 
+                                <img src={ this.state.event.thumbnail_image_url } />
+                            </div>
+                        }
+
+                        { this.state.event.time_start &&
                             <div>
                                 time_start: 
-                                { new Date(this.state.event.time_start).getDate() + '-' } 
-                                { new Date(this.state.event.time_start).getMonth()+1 + '-' }
-                                { new Date(this.state.event.time_start).getFullYear() + ', ' }
-                                { new Date(this.state.event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' }
+                                { 
+                                    new Date(this.state.event.time_start).getDate() + '-' + 
+                                    (new Date(this.state.event.time_start).getMonth()+1) + '-' + 
+                                    new Date(this.state.event.time_start).getFullYear() + ', ' + 
+                                    new Date(this.state.event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' 
+                                 }
                                 <br />
                             </div>
                         }
 
-                        { //this.state.event.time_stop &&
+                        { this.state.event.time_stop &&
                             <div>
                                 time_stop: 
-                                { new Date(this.state.event.time_stop).getDate() + '-' } 
-                                { new Date(this.state.event.time_stop).getMonth()+1 + '-' }
-                                { new Date(this.state.event.time_stop).getFullYear() + ', ' }
-                                { new Date(this.state.event.time_stop).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' }
+                                { 
+                                    new Date(this.state.event.time_stop).getDate() + '-' + 
+                                    (new Date(this.state.event.time_stop).getMonth()+1) + '-' + 
+                                    new Date(this.state.event.time_stop).getFullYear() + ', ' + 
+                                    new Date(this.state.event.time_stop).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' '
+                                }
                                 <br />
                             </div>
                         }
