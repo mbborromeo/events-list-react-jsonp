@@ -12,10 +12,6 @@ class Event extends React.Component {
         }
     }
 
-    getEventID(properties) {
-        return properties.match.params.id;
-    }
-
     getEvent( id ) {
         axios.jsonp(`https://demo1-webservice.eventbase.com/v4/admin/events/frontendcodechallenge/sessions/${ id }`, 
         {
@@ -39,6 +35,10 @@ class Event extends React.Component {
             console.log(error);
           }
         );
+    }
+    
+    getEventID(properties) {
+        return properties.match.params.id;
     }
 
     componentDidMount() {
