@@ -40,7 +40,7 @@ class App extends Component {
     return (
       <div className="App">
         { this.state.loading ?
-          <div>Loading</div> :
+          <div>Loading events list</div> :
           <div>
             <Router>
               <div>

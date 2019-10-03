@@ -4,6 +4,7 @@ import axios from 'axios-jsonp-pro';
 
 class Event extends React.Component {
     state = {
+        loading: true,
         event: [],
     }
 
@@ -46,10 +47,15 @@ class Event extends React.Component {
     render() {
         return (
             <div>
-                Event name is { this.state.event.name }
+                { this.state.loading ?
+                    <div>Loading event</div> :
+                    <div>
+                        Event name is { this.state.event.name }
 
-                <hr />
-                <Link to='/'>Back to Event List</Link>
+                        <hr />
+                        <Link to='/'>Back to Event List</Link>
+                    </div>
+                }
             </div>
         );
     }
