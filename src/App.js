@@ -5,7 +5,6 @@ import EventsList from './EventsList';
 import Event from './Event';
 
 class App extends Component {
-
   render() {
     return (
       <div className="App">
@@ -14,7 +13,6 @@ class App extends Component {
             <Route 
               path='/' 
               exact 
-              //render={ () => <EventsList events={ this.state.events } /> }
               component={EventsList}
             />
 

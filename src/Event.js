@@ -3,22 +3,21 @@ import axios from 'axios-jsonp-pro';
 import { Link } from 'react-router-dom';
 
 class Event extends React.Component {
-    state = {
-        loading: true,
-        event: [],        
-    }
-
     constructor(props) {
-        super(props);
-        console.log("props are: ", props);
-        console.log("state.event is: ", this.state.event);
+        super(props);        
+
+        this.state = {
+            loading: true,
+            event: [],        
+        }
     }
 
-    componentDidMount() {
-        const eventID = this.props.match.params.id;
+    getEventID(properties) {
+        return properties.match.params.id;
+    }
 
-        //call API to get Details for Event with eventID and save this in State event
-        axios.jsonp(`https://demo1-webservice.eventbase.com/v4/admin/events/frontendcodechallenge/sessions/${ eventID }`, 
+    getEvent( id ) {
+        axios.jsonp(`https://demo1-webservice.eventbase.com/v4/admin/events/frontendcodechallenge/sessions/${ id }`, 
         {
             timeout: 2000,
             params: {
@@ -42,7 +41,22 @@ class Event extends React.Component {
         );
     }
 
+    componentDidMount() {
+        const eventID = this.getEventID( this.props );
+        this.getEvent( eventID );
+    }
+
+    componentDidUpdate(prevProps) {
+        const eventID = this.getEventID( this.props );
+
+        if( eventID !== this.getEventID( prevProps ) ){
+          this.getEvent( eventID );
+        }
+    }
+
     render() {
+        console.log("this.state.event is: ", this.state.event);
+
         return (
             <div>
                 { this.state.loading ?
@@ -96,9 +110,9 @@ class Event extends React.Component {
                             </div>
                         }
 
-                        { //this.state.event.location &&
+                        { this.state.event.location && this.state.event.location.name &&
                             <div>
-                                location.name: { this.state.event.location }<br />
+                                location.name: { this.state.event.location.name }<br />
                             </div>
                         }
 

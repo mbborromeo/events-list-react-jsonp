@@ -3,16 +3,16 @@ import axios from 'axios-jsonp-pro'; //https://www.npmjs.com/package/axios-jsonp
 import { Link } from 'react-router-dom';
 
 class EventsList extends React.Component {
-    state = {
-        loading: true,
-        events: [],
-    }
-
     constructor(props) {
         super(props);
+
+        this.state = {
+            loading: true,
+            events: [],
+        }
     }
-    
-    componentDidMount() {        
+
+    getEvents() {
         axios.jsonp(`https://demo1-webservice.eventbase.com/v4/admin/events/frontendcodechallenge/sessions`, 
           {
             timeout: 2000,
@@ -35,6 +35,10 @@ class EventsList extends React.Component {
               console.log(error);
             }
           );
+    }
+    
+    componentDidMount() {        
+        this.getEvents();
     }
 
     render() {
