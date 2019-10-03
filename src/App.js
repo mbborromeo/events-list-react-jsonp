@@ -19,7 +19,12 @@ class App extends Component {
             <Route
               path="/event/:id" 
               component={Event}
-            />            
+            />
+
+            <Route
+              path="/page/:number" 
+              component={EventsList}
+            />
           </div>
         </Router>  
       </div>

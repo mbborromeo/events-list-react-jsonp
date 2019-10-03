@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios-jsonp-pro'; //https://www.npmjs.com/package/axios-jsonp-pro
 import { Link } from 'react-router-dom';
 import './EventsList.scss';
+import { thisExpression } from '@babel/types';
 
 class EventsList extends React.Component {
     constructor(props) {
@@ -11,20 +12,19 @@ class EventsList extends React.Component {
             loading: true,
             events: [],            
             eventsPerPage: 30,
-            currentPage: 1,//46 + 1
             totalEvents: undefined,
             totalPages: undefined,
         }
     }
 
-    getEvents() {
+    getEvents( currentPage=1 ) {
         axios.jsonp(`https://demo1-webservice.eventbase.com/v4/admin/events/frontendcodechallenge/sessions`, 
           {
             timeout: 2000,
             params: {
               api: 'cc1-0befd4410327ac7b8c7f88e4ed466e87d6f78eff29de81c3ee4e28d79b604eb2-0c75664d5c8211b4395e7f766a415a25827c7cf2',
               per_page: this.state.eventsPerPage,
-              page: this.state.currentPage,
+              page: currentPage,
               //search: 'Jason',
             }
           })
@@ -47,77 +47,81 @@ class EventsList extends React.Component {
           );
     }
 
-    getPageIndex( fromState ) {
-        return fromState.currentPage;
-    }
-    
-    componentDidMount() {        
-        this.getEvents();
-    }
+    getPageIndex(prop) {
+        //console.log("getPageIndex properties: ", prop);
 
-    componentDidUpdate(prevProps, prevState) {
-        //const pageID = this.getPageIndex( this.props );
-        let proposedPage = this.state.currentPage;
-
-        if( proposedPage !== this.getPageIndex(prevState) ){
-          this.getEvents();
+        if(prop.match.params.number){
+            return parseInt(prop.match.params.number);
+        } else {
+            return 1;
         }
     }
 
-    handleNextClick() {
-        console.log('Click Next happened');
-        let proposedPage = this.state.currentPage + 1;
+    getNextPageIndex(properties) {
+        let currentPageIndex = this.getPageIndex(properties);
 
-        if(proposedPage <= this.state.totalPages) {
-            this.setState(
-                {
-                    currentPage: proposedPage,
-                }
-            );
+        if( (currentPageIndex + 1) < this.state.totalPages ) {
+            return currentPageIndex + 1;
+        } else {
+            return this.state.totalPages;
+        }            
+        
+    }
 
-            //update in componentDidUpdate            
+    getPrevPageIndex(properties) {
+        let currentPageIndex = this.getPageIndex(properties);
+
+        if( (currentPageIndex - 1) >= 1 ) {
+            return currentPageIndex - 1;
+        } else {
+            return 1;
         }
     }
     
-    handleEndClick() {
-        console.log('Click End happened');
+    handleNextClick(e) {
+        if( this.getPageIndex(this.props) >= this.state.totalPages ) {
+            console.log("handleNextClick : on last page");
+            e.preventDefault();
+        }
+    }
+
+    handleEndClick(e) {
         let proposedPage = this.state.totalPages;
-       
-        if( this.state.currentPage !== proposedPage ) {
-            this.setState(
-                {
-                    currentPage: proposedPage,
-                }
-            );
+
+        if( this.getPageIndex(this.props) === proposedPage ) {
+            console.log("handleEndClick : on very last page");
+            e.preventDefault();
         }
     }
 
-    handleBeginningClick() {        
+    handlePrevClick(e) {
+        if( this.getPageIndex(this.props) <= 1 ) {
+            console.log("handlePrevClick : on first page");
+            e.preventDefault();
+        }
+    }
+
+    handleBeginningClick(e) {      
         let proposedPage = 1;
 
-        if( this.state.currentPage !== proposedPage ) {
-            console.log('Click Start happened');
-            this.setState(
-                {
-                    currentPage: proposedPage,
-                }
-            );
+        if( this.getPageIndex(this.props) === proposedPage ) {
+            console.log("handleBeginningClick : on very first page");
+            e.preventDefault();
         }
     }
 
-    handlePrevClick() {
-        console.log('Click Prev happened');
-
-        let proposedPage = this.state.currentPage - 1;
-
-        if(proposedPage > 0) {
-            this.setState(
-                {
-                    currentPage: proposedPage,
-                }
-            );          
-        }
+    componentDidMount() {      
+        const pageIndex = this.getPageIndex( this.props );
+        this.getEvents( pageIndex );
     }
+
+    componentDidUpdate(prevProps) {
+        const pageIndex = this.getPageIndex( this.props );
+
+        if( pageIndex !== this.getPageIndex( prevProps ) ){
+          this.getEvents( pageIndex );
+        }
+    }    
 
     render() {
         console.log("this.state", this.state);
@@ -154,15 +158,14 @@ class EventsList extends React.Component {
                             )
                         }  
 
-                        <button onClick={ () => this.handleBeginningClick() }>&laquo;</button>
+                        <Link to={'/page/' + 1 } onClick={ (ev) => this.handleBeginningClick(ev) }>&laquo; Start </Link>&nbsp;
+                        <Link to={'/page/' + this.getPrevPageIndex(this.props) } onClick={ (ev) => this.handlePrevClick(ev) }>&lt; Prev</Link>&nbsp;
 
-                        <button onClick={ () => this.handlePrevClick() }>Prev</button>
+                        Page { this.getPageIndex(this.props) } / { this.state.totalPages }
+                        &nbsp;
 
-                        Page { this.state.currentPage } / { this.state.totalPages }
-
-                        <button onClick={ () => this.handleNextClick() }>Next</button>
-
-                        <button onClick={ () => this.handleEndClick() }>&raquo;</button>
+                        <Link to={'/page/' + this.getNextPageIndex(this.props) } onClick={ (ev) => this.handleNextClick(ev) }>Next &gt;</Link>&nbsp;
+                        <Link to={'/page/' + this.state.totalPages } onClick={ (ev) => this.handleEndClick(ev) }>End &raquo;</Link>
 
                     </div>
                 }        
