@@ -38,6 +38,7 @@ class Event extends React.Component {
     }
     
     getEventID(properties) {
+        console.log("props are: ", properties);
         return properties.match.params.id;
     }
 

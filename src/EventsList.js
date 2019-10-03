@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios-jsonp-pro'; //https://www.npmjs.com/package/axios-jsonp-pro
 import { Link } from 'react-router-dom';
+import './EventsList.scss';
 
 class EventsList extends React.Component {
     constructor(props) {
@@ -79,6 +80,26 @@ class EventsList extends React.Component {
         }
     }
 
+    handleBeginningClick() {
+        console.log('Click Start happened');
+       
+        this.setState(
+            {
+                currentPage: 1,
+            }
+        );
+    }
+
+    handleEndClick() {
+        console.log('Click End happened');
+       
+        this.setState(
+            {
+                currentPage: this.state.totalPages,
+            }
+        );
+    }
+
     handlePrevClick() {
         console.log('Click Prev happened');
 
@@ -128,11 +149,15 @@ class EventsList extends React.Component {
                             )
                         }  
 
-                        <button onClick={ () => this.handlePrevClick() }>Previous</button>
+                        <button onClick={ () => this.handleBeginningClick() }>&laquo;</button>
 
-                        Page { this.state.currentPage } of { this.state.totalPages }
+                        <button onClick={ () => this.handlePrevClick() }>Prev</button>
+
+                        Page { this.state.currentPage } / { this.state.totalPages }
 
                         <button onClick={ () => this.handleNextClick() }>Next</button>
+
+                        <button onClick={ () => this.handleEndClick() }>&raquo;</button>
 
                     </div>
                 }        
