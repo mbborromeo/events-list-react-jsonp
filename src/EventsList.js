@@ -94,13 +94,6 @@ class EventsList extends React.Component {
         if( pageIndex !== this.getPageIndex( prevProps ) ){
             this.getEvents( pageIndex, keyword );
         }
-
-        /*
-        //check if keyword changed
-        if( keyword !== prevState.filterKeyword.toLowerCase() ) {
-            this.getEvents( undefined, keyword );            
-        }
-        */
     }
 
     handleChangeKeyword(event) {
@@ -126,10 +119,12 @@ class EventsList extends React.Component {
         if( keyword != this.state.previousFilterKeyword.toLowerCase() ) {
             // need to reset pageIndex to 1 if new keyword            
             pageIndex = 1;
-            console.log("different: pageIndex: ", pageIndex);
+            console.log("different keyword: pageIndex: ", pageIndex);
+            this.props.history.push('/page/1');
+
         } else {            
             pageIndex = this.getPageIndex( this.props );
-            console.log("same : pageIndex: ", pageIndex);
+            console.log("same keyword: pageIndex: ", pageIndex);
         }  
 
         this.getEvents( pageIndex, keyword );        
@@ -138,7 +133,7 @@ class EventsList extends React.Component {
     render() {
         //console.log("this.state", this.state);
         const { match, location, history } = this.props;
-
+        console.log("EventsList :: render :: props: ", this.props);
 
         return (
             <div>
