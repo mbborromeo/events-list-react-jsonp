@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.scss';
-import { HashRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import EventsList from './EventsList';
 import Event from './Event';
 
@@ -10,21 +10,20 @@ class App extends Component {
       <div className="App">
         <Router>
           <div>
-            <Route 
-              path='/' 
-              exact 
+            <Route
+              path="/page/:number" 
               component={EventsList}
+            />
+
+            <Redirect 
+              // from='/#/'
+              to='/page/1' 
             />
 
             <Route
               path="/event/:id" 
               component={Event}
-            />
-
-            <Route
-              path="/page/:number" 
-              component={EventsList}
-            />
+            />            
           </div>
         </Router>  
       </div>

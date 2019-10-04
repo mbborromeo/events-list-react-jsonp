@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
+import { withRouter } from "react-router"
 
 class Event extends React.Component {
     constructor(props) {
@@ -130,18 +131,20 @@ class Event extends React.Component {
                         <br /><br />
 
                         <hr />
-                        <Link 
-                            to='/'
-                            //onClick={ () => this.props.history.goBack }
+                        <button      
+                            //to='/page/1'                       
+                            onClick={ () => this.props.history.goBack() }
                             className='button back'
                         >
                             &lt; Back
-                        </Link>
+                        </button>
                     </div>
                 }
             </div>
         );
     }
 }
+
+const EventWithRouter = withRouter( Event );
 
 export default Event;
