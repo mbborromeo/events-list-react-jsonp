@@ -15,15 +15,20 @@ class App extends Component {
               component={EventsList}
             />
 
-            <Redirect 
-              // from='/#/'
-              to='/page/1' 
-            />
-
             <Route
               path="/event/:id" 
               component={Event}
-            />            
+            />   
+
+            <Redirect 
+              from='/#/'
+              to='/page/1' 
+            />
+
+            <Redirect 
+              from='/#'
+              to='/page/1' 
+            />
           </div>
         </Router>  
       </div>
