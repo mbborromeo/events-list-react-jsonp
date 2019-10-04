@@ -134,7 +134,12 @@ class Event extends React.Component {
                         <br /><br />
 
                         <hr />
-                        <Link to='/'>&lt; Back</Link>
+                        <Link 
+                            to='/'
+                            className='button back'
+                        >
+                            &lt; Back
+                        </Link>
                     </div>
                 }
             </div>
