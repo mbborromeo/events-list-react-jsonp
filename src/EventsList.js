@@ -47,34 +47,6 @@ class EventsList extends React.Component {
             return 1;
         }
     }
-    
-    handleNextClick(e) {
-        if( this.getPageIndex(this.props) >= this.state.totalPages ) {
-            e.preventDefault();
-        }
-    }
-
-    handleEndClick(e) {
-        let proposedPage = this.state.totalPages;
-
-        if( this.getPageIndex(this.props) === proposedPage ) {
-            e.preventDefault();
-        }
-    }
-
-    handlePrevClick(e) {
-        if( this.getPageIndex(this.props) <= 1 ) {
-            e.preventDefault();
-        }
-    }
-
-    handleBeginningClick(e) {      
-        let proposedPage = 1;
-
-        if( this.getPageIndex(this.props) === proposedPage ) {
-            e.preventDefault();
-        }
-    }
 
     getEvents( pageNum, searchKeyword ) {
         this.eventsService.getEvents( pageNum, searchKeyword )
@@ -194,7 +166,7 @@ class EventsList extends React.Component {
                         
                         <Link 
                             to={'/page/' + 1 } 
-                            onClick={ (ev) => this.handleBeginningClick(ev) }                            
+                            //onClick={ (ev) => this.handleBeginningClick(ev) }                            
                             className={ this.getPageIndex(this.props) === 1 ? 'button page' + ' disabled' : 'button page' }
                         >
                             &laquo; Start 
@@ -202,7 +174,6 @@ class EventsList extends React.Component {
 
                         <Link 
                             to={'/page/' + this.getPrevPageIndex(this.props) } 
-                            onClick={ (ev) => this.handlePrevClick(ev) }
                             className={ this.getPageIndex(this.props) === 1 ? 'button page' + ' disabled' : 'button page' }
                         >
                             &lt; Prev
@@ -213,7 +184,6 @@ class EventsList extends React.Component {
 
                         <Link 
                             to={'/page/' + this.getNextPageIndex(this.props) } 
-                            onClick={ (ev) => this.handleNextClick(ev) }
                             className={ this.getPageIndex(this.props) === this.state.totalPages ? 'button page' + ' disabled' : 'button page' }
                         >
                             Next &gt;
@@ -221,7 +191,6 @@ class EventsList extends React.Component {
 
                         <Link 
                             to={'/page/' + this.state.totalPages } 
-                            onClick={ (ev) => this.handleEndClick(ev) }
                             className={ this.getPageIndex(this.props) === this.state.totalPages ? 'button page' + ' disabled' : 'button page' }
                         >
                             End &raquo;                        
