@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import * as Constants from './constants';
 import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
+import PropTypes from "prop-types"
+import { withRouter } from "react-router"
 import './EventsList.scss';
 
 class EventsList extends React.Component {
@@ -12,10 +14,17 @@ class EventsList extends React.Component {
             loading: true,
             events: [],
             filterKeyword: '',
+            previousFilterKeyword: '',
             totalPages: undefined,
         }
 
         this.eventsService = new EventsService();
+    }
+    
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
     }
 
     getPageIndex(prop) {
@@ -94,26 +103,41 @@ class EventsList extends React.Component {
     }
 
     handleChangeKeyword(event) {
-        this.setState(
-            { filterKeyword: event.target.value }
-        );
+        this.setState({                 
+            filterKeyword: event.target.value,
+        });
     }
     
     handleSubmit(event) {
         event.preventDefault();    
+
+        this.setState({
+            previousFilterKeyword: this.state.filterKeyword,
+        });
         
         //search with query string
         const keyword = this.state.filterKeyword.toLowerCase();
+        let pageIndex = undefined;
 
-        // need to reset pageIndex to 1 if new keyword
-        const pageIndex = this.getPageIndex( this.props );
+        console.log("keyword is: ", keyword);
+        console.log("prev keyword is: ", this.state.previousFilterKeyword.toLowerCase() );
 
-        this.getEvents( pageIndex, keyword );
-        
+        if( keyword != this.state.previousFilterKeyword.toLowerCase() ) {
+            // need to reset pageIndex to 1 if new keyword            
+            pageIndex = 1;
+            console.log("different: pageIndex: ", pageIndex);
+        } else {            
+            pageIndex = this.getPageIndex( this.props );
+            console.log("same : pageIndex: ", pageIndex);
+        }  
+
+        this.getEvents( pageIndex, keyword );        
     }
 
     render() {
         //console.log("this.state", this.state);
+        const { match, location, history } = this.props;
+
 
         return (
             <div>
@@ -121,6 +145,8 @@ class EventsList extends React.Component {
                     <div>Loading events list</div> :
                     <div>
                         <h1>Events List</h1>
+
+                        <span>You are now at {location.pathname}</span><br /><br />
 
                         <form onSubmit={ this.handleSubmit.bind(this) }>
                             <label>
@@ -202,5 +228,9 @@ class EventsList extends React.Component {
         );
     }
 }
+
+// Create a new component that is "connected" (to borrow redux
+// terminology) to the router.
+const EventsListWithRouter = withRouter( EventsList )
 
 export default EventsList;
