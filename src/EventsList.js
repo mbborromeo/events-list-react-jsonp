@@ -60,8 +60,7 @@ class EventsList extends React.Component {
     getEvents( pageNum, searchKeyword ) {
         this.eventsService.getEvents( pageNum, searchKeyword )
             .then( response => {
-                console.log("EventsService :: response : ", response);
-                console.log("STATE is: ", this.state);
+                console.log("EventsService :: response : ", response);                
 
                 this.setState(
                     {
@@ -72,6 +71,8 @@ class EventsList extends React.Component {
                         loading: false, 
                     }
                 );
+
+                console.log("STATE is: ", this.state);
               }
             )
             .catch( function (error) {
