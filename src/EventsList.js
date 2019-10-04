@@ -142,8 +142,6 @@ class EventsList extends React.Component {
                     <div>
                         <h1>Events List</h1>
 
-                        <span>You are now at {location.pathname}</span><br /><br />
-
                         <form onSubmit={ this.handleSubmit.bind(this) }>
                             <label>
                                 Keywords
