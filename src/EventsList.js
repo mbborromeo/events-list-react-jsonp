@@ -146,14 +146,14 @@ class EventsList extends React.Component {
 
                         <form onSubmit={ this.handleSubmit.bind(this) }>
                             <label>
-                                Keywords
+                                Title: 
                                 <input type="text" name="keyword"
                                     value={ this.state.filterKeyword }
                                     onChange={ this.handleChangeKeyword.bind(this) }
                                     placeholder="eg Band"
                                 />
                             </label>
-                            <input type="submit" value="Apply"  />
+                            <input type="submit" value="Search"  />
                         </form>
                         <br /><br />
 
