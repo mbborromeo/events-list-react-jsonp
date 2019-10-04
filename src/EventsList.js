@@ -122,6 +122,7 @@ class EventsList extends React.Component {
             // need to reset pageIndex to 1 if new keyword            
             pageIndex = 1;
             console.log("different keyword: pageIndex: ", pageIndex);
+            //force update URL in browser
             this.props.history.push('/page/1');
 
         } else {            
@@ -129,7 +130,36 @@ class EventsList extends React.Component {
             console.log("same keyword: pageIndex: ", pageIndex);
         }  
 
+        console.log("!!!!!!!!!! handleSubmit : this.getEvents !!!!!!!!!!!!!!!!");
+        //load events according to page number and keyword
         this.getEvents( pageIndex, keyword );        
+    }
+    
+    handleCancel(event) {
+        event.preventDefault();    
+
+        //resetting string only works after this function finishes...
+        this.setState({
+            filterKeyword: '',
+        });
+
+        //search with query string
+        const keyword = this.state.filterKeyword.toLowerCase();
+        let pageIndex = undefined;
+
+        console.log("@@@@@@@@@@@@@@ handleCancel :: keyword is: ", keyword);
+        console.log("@@@@@@@@@@@@@@ prev keyword is: ", this.state.previousFilterKeyword.toLowerCase() );
+
+        if( keyword != this.state.previousFilterKeyword.toLowerCase() ) {
+            // need to reset pageIndex to 1 if new keyword            
+            pageIndex = 1;
+            console.log("different keyword: pageIndex: ", pageIndex);
+            //force update URL in browser
+            this.props.history.push('/page/1');
+
+            //load events according to page number and keyword
+            this.getEvents( pageIndex, keyword ); 
+        }
     }
 
     render() {
@@ -146,14 +176,15 @@ class EventsList extends React.Component {
 
                         <form onSubmit={ this.handleSubmit.bind(this) }>
                             <label>
-                                Keywords
+                                Title: 
                                 <input type="text" name="keyword"
                                     value={ this.state.filterKeyword }
                                     onChange={ this.handleChangeKeyword.bind(this) }
                                     placeholder="eg Band"
                                 />
                             </label>
-                            <input type="submit" value="Apply"  />
+                            <input type="submit" value="Search" />
+                            <input type="reset" value="Cancel" onClick={ this.handleCancel.bind(this) } />
                         </form>
                         <br /><br />
 
