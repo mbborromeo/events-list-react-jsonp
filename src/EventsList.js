@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import axios from 'axios-jsonp-pro'; //https://www.npmjs.com/package/axios-jsonp-pro
+import * as Constants from './constants';
+import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
 import './EventsList.scss';
-import { thisExpression } from '@babel/types';
 
 class EventsList extends React.Component {
     constructor(props) {
@@ -10,46 +10,15 @@ class EventsList extends React.Component {
 
         this.state = {
             loading: true,
-            events: [],            
-            eventsPerPage: 30,
+            events: [],
             totalEvents: undefined,
             totalPages: undefined,
         }
-    }
 
-    getEvents( currentPage=1 ) {
-        axios.jsonp(`https://demo1-webservice.eventbase.com/v4/admin/events/frontendcodechallenge/sessions`, 
-          {
-            timeout: 2000,
-            params: {
-              api: 'cc1-0befd4410327ac7b8c7f88e4ed466e87d6f78eff29de81c3ee4e28d79b604eb2-0c75664d5c8211b4395e7f766a415a25827c7cf2',
-              per_page: this.state.eventsPerPage,
-              page: currentPage,
-              //search: 'Jason',
-            }
-          })
-          .then( response => {
-              console.log(response);
-    
-              this.setState(
-                {
-                  events: response.data,
-                  totalEvents: response.meta.total,
-                  totalPages: Math.floor(response.meta.total/this.state.eventsPerPage)+1,
-                  loading: false, 
-                }
-              );
-            }
-          )
-          .catch( function (error) {
-              console.log(error);
-            }
-          );
+        this.eventsService = new EventsService();
     }
 
     getPageIndex(prop) {
-        console.log("getPageIndex properties: ", prop);
-
         if(prop.match.params.number){
             return parseInt(prop.match.params.number);
         } else {
@@ -80,7 +49,6 @@ class EventsList extends React.Component {
     
     handleNextClick(e) {
         if( this.getPageIndex(this.props) >= this.state.totalPages ) {
-            console.log("handleNextClick : on last page");
             e.preventDefault();
         }
     }
@@ -89,14 +57,12 @@ class EventsList extends React.Component {
         let proposedPage = this.state.totalPages;
 
         if( this.getPageIndex(this.props) === proposedPage ) {
-            console.log("handleEndClick : on very last page");
             e.preventDefault();
         }
     }
 
     handlePrevClick(e) {
         if( this.getPageIndex(this.props) <= 1 ) {
-            console.log("handlePrevClick : on first page");
             e.preventDefault();
         }
     }
@@ -105,13 +71,34 @@ class EventsList extends React.Component {
         let proposedPage = 1;
 
         if( this.getPageIndex(this.props) === proposedPage ) {
-            console.log("handleBeginningClick : on very first page");
             e.preventDefault();
         }
     }
 
-    componentDidMount() {      
+    getEvents( pageNum ) {
+        this.eventsService.getEvents( pageNum )
+            .then( response => {
+                //console.log("EventsService :: response : ", response);
+
+                this.setState(
+                    {
+                        events: response.data,
+                        totalEvents: response.meta.total,
+                        totalPages: Math.floor(response.meta.total/Constants.EVENTS_PER_PAGE)+1,
+                        loading: false, 
+                    }
+                );
+              }
+            )
+            .catch( function (error) {
+                console.log(error);
+              }
+            );
+    }
+
+    componentDidMount() {           
         const pageIndex = this.getPageIndex( this.props );
+
         this.getEvents( pageIndex );
     }
 
@@ -124,7 +111,7 @@ class EventsList extends React.Component {
     }    
 
     render() {
-        console.log("this.state", this.state);
+        //console.log("this.state", this.state);
 
         return (
             <div>

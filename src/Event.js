@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios-jsonp-pro';
+import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
 
 class Event extends React.Component {
@@ -10,35 +10,31 @@ class Event extends React.Component {
             loading: true,
             event: [],        
         }
+        
+        this.eventsService = new EventsService();
     }
 
     getEvent( id ) {
-        axios.jsonp(`https://demo1-webservice.eventbase.com/v4/admin/events/frontendcodechallenge/sessions/${ id }`, 
-        {
-            timeout: 2000,
-            params: {
-              api: 'cc1-0befd4410327ac7b8c7f88e4ed466e87d6f78eff29de81c3ee4e28d79b604eb2-0c75664d5c8211b4395e7f766a415a25827c7cf2'
-            }
-        })
-        .then( response => {
-            console.log(response);
+        this.eventsService.getEvent( id )
+            .then( response => {
+                //console.log("Event :: getEvent : ", response);
 
-              this.setState(
-                {
-                  event: response.data,
-                  loading: false,
+                this.setState(
+                    {
+                    event: response.data,
+                    loading: false,
+                    }
+                );
                 }
-              );
+            )
+            .catch( function (error) {
+                console.log(error);
             }
-        )
-        .catch( function (error) {
-            console.log(error);
-          }
-        );
+            );
     }
     
     getEventID(properties) {
-        console.log("props are: ", properties);
+        //console.log("props are: ", properties);
         return properties.match.params.id;
     }
 
@@ -56,7 +52,7 @@ class Event extends React.Component {
     }
 
     render() {
-        console.log("this.state.event is: ", this.state.event);
+        //console.log("this.state.event is: ", this.state.event);
 
         return (
             <div>
@@ -136,6 +132,7 @@ class Event extends React.Component {
                         <hr />
                         <Link 
                             to='/'
+                            //onClick={ () => this.props.history.goBack }
                             className='button back'
                         >
                             &lt; Back
