@@ -7,3 +7,19 @@ h3 {
         }
     }
 }
+
+.page-button {
+    border: 1px solid black;
+    text-decoration: none;
+
+    &.disabled {
+        pointer-events: none;
+        color: grey;
+        border: 1px solid grey;
+        opacity: 0.5;
+    }
+
+    &:hover {
+        background-color: yellow;
+    }
+}

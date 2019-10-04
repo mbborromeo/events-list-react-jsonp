@@ -64,14 +64,9 @@ class Event extends React.Component {
                     <div>Loading event</div> :
                     <div>
                         { this.state.event.name &&
-                            <div>
-                                { this.state.event.name }
-                                { this.state.event.id &&
-                                    <span>
-                                        { ' (ID: ' + this.state.event.id + ')' }<br />
-                                    </span>
-                                }
-                            </div>
+                            <h1>
+                                { this.state.event.name }                                
+                            </h1>
                         }
 
                         { this.state.event.description &&
@@ -119,7 +114,14 @@ class Event extends React.Component {
 
                         { this.state.event.location && this.state.event.location.name &&
                             <div>
-                                location.name: { this.state.event.location.name }<br />
+                                Location: { this.state.event.location.name }<br />
+                            </div>
+                        }
+
+                        
+                        { this.state.event.id &&
+                            <div>
+                                Event ID: { this.state.event.id }
                             </div>
                         }
                         
@@ -130,7 +132,9 @@ class Event extends React.Component {
                         }
 
                         <br /><br />
-                        <Link to='/'>Back to Event List</Link>
+
+                        <hr />
+                        <Link to='/'>&lt; Back</Link>
                     </div>
                 }
             </div>

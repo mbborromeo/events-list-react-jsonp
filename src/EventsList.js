@@ -48,7 +48,7 @@ class EventsList extends React.Component {
     }
 
     getPageIndex(prop) {
-        //console.log("getPageIndex properties: ", prop);
+        console.log("getPageIndex properties: ", prop);
 
         if(prop.match.params.number){
             return parseInt(prop.match.params.number);
@@ -58,21 +58,21 @@ class EventsList extends React.Component {
     }
 
     getNextPageIndex(properties) {
-        let currentPageIndex = this.getPageIndex(properties);
+        const currentPageIndex = this.getPageIndex(properties);
+        const nextPageIndex = currentPageIndex + 1;
 
-        if( (currentPageIndex + 1) < this.state.totalPages ) {
-            return currentPageIndex + 1;
+        if( nextPageIndex < this.state.totalPages ) {
+            return nextPageIndex;
         } else {
             return this.state.totalPages;
-        }            
-        
+        }        
     }
 
     getPrevPageIndex(properties) {
-        let currentPageIndex = this.getPageIndex(properties);
-
-        if( (currentPageIndex - 1) >= 1 ) {
-            return currentPageIndex - 1;
+        const currentPageIndex = this.getPageIndex(properties);
+        const prevPageIndex = currentPageIndex - 1;
+        if( prevPageIndex >= 1 ) {
+            return prevPageIndex;
         } else {
             return 1;
         }
@@ -131,7 +131,7 @@ class EventsList extends React.Component {
                 { this.state.loading ?
                     <div>Loading events list</div> :
                     <div>
-                        <h1>Event List</h1>
+                        <h1>Events List</h1>
                         { 
                             this.state.events.map( event =>
                                 <h3 key={event.id}>
@@ -158,14 +158,42 @@ class EventsList extends React.Component {
                             )
                         }  
 
-                        <Link to={'/page/' + 1 } onClick={ (ev) => this.handleBeginningClick(ev) }>&laquo; Start </Link>&nbsp;
-                        <Link to={'/page/' + this.getPrevPageIndex(this.props) } onClick={ (ev) => this.handlePrevClick(ev) }>&lt; Prev</Link>&nbsp;
+                        <hr />
+
+                        <Link 
+                            to={'/page/' + 1 } 
+                            onClick={ (ev) => this.handleBeginningClick(ev) }                            
+                            className={ this.getPageIndex(this.props) === 1 ? 'page-button ' + 'disabled' : 'page-button' }
+                        >
+                            &laquo; Start 
+                        </Link>&nbsp;
+
+                        <Link 
+                            to={'/page/' + this.getPrevPageIndex(this.props) } 
+                            onClick={ (ev) => this.handlePrevClick(ev) }
+                            className={ this.getPageIndex(this.props) === 1 ? 'page-button ' + 'disabled' : 'page-button' }
+                        >
+                            &lt; Prev
+                        </Link>&nbsp;
 
                         Page { this.getPageIndex(this.props) } / { this.state.totalPages }
                         &nbsp;
 
-                        <Link to={'/page/' + this.getNextPageIndex(this.props) } onClick={ (ev) => this.handleNextClick(ev) }>Next &gt;</Link>&nbsp;
-                        <Link to={'/page/' + this.state.totalPages } onClick={ (ev) => this.handleEndClick(ev) }>End &raquo;</Link>
+                        <Link 
+                            to={'/page/' + this.getNextPageIndex(this.props) } 
+                            onClick={ (ev) => this.handleNextClick(ev) }
+                            className={ this.getPageIndex(this.props) === this.state.totalPages ? 'page-button ' + 'disabled' : 'page-button' }
+                        >
+                            Next &gt;
+                        </Link>&nbsp;
+
+                        <Link 
+                            to={'/page/' + this.state.totalPages } 
+                            onClick={ (ev) => this.handleEndClick(ev) }
+                            className={ this.getPageIndex(this.props) === this.state.totalPages ? 'page-button ' + 'disabled' : 'page-button' }
+                        >
+                            End &raquo;                        
+                        </Link>
 
                     </div>
                 }        
