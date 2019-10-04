@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import * as Constants from './constants';
 import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
-//import PropTypes from "prop-types"
 import { withRouter } from "react-router"
 import './EventsList.scss';
 
@@ -21,14 +20,6 @@ class EventsList extends React.Component {
         this.eventsService = new EventsService();
     }
     
-    /*
-    static propTypes = {
-        match: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired
-    }
-    */
-
     getPageIndex(prop) {
         console.log("getPageIndex prop: ", prop);
         if(prop.match.params.number){
@@ -134,8 +125,7 @@ class EventsList extends React.Component {
 
     render() {
         //console.log("this.state", this.state);
-        const { match, location, history } = this.props;
-        console.log("EventsList :: render :: props: ", this.props);
+        console.log("************** EventsList :: render :: props: ", this.props);
 
         return (
             <div>
