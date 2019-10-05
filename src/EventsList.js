@@ -136,8 +136,6 @@ class EventsList extends React.Component {
                         <h1>Events List</h1>
 
                         <SearchField 
-                            filterKeyword={this.state.filterKeyword} 
-                            previousFilterKeyword={this.state.previousFilterKeyword} 
                             onChangeKeyword={this.handleChangeKeyword.bind(this)}
                             onSubmit={this.handleSubmit.bind(this)}
                         />
