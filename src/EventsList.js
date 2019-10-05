@@ -4,6 +4,7 @@ import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router"
 import './EventsList.scss';
+import SearchField from './SearchField';
 
 class EventsList extends React.Component {
     constructor(props) {
@@ -18,6 +19,38 @@ class EventsList extends React.Component {
         }
 
         this.eventsService = new EventsService();
+    }
+
+    handleChangeKeyword(keyword) {
+        this.setState({                 
+            filterKeyword: keyword,
+        });
+    }
+    
+    handleSubmit() {
+        this.setState({
+            previousFilterKeyword: this.state.filterKeyword,
+        });
+        
+        //search with query string
+        const keyword = this.state.filterKeyword.toLowerCase();
+        let pageIndex = undefined;
+
+        console.log("keyword is: ", keyword);
+        console.log("prev keyword is: ", this.state.previousFilterKeyword.toLowerCase() );
+
+        if( keyword != this.state.previousFilterKeyword.toLowerCase() ) {
+            // need to reset pageIndex to 1 if new keyword            
+            pageIndex = 1;
+            console.log("different keyword: pageIndex: ", pageIndex);
+            this.props.history.push('/page/1');
+
+        } else {            
+            pageIndex = this.getPageIndex( this.props );
+            console.log("same keyword: pageIndex: ", pageIndex);
+        }  
+
+        this.getEvents( pageIndex, keyword );  
     }
     
     getPageIndex(prop) {
@@ -89,39 +122,7 @@ class EventsList extends React.Component {
         }
     }
 
-    handleChangeKeyword(event) {
-        this.setState({                 
-            filterKeyword: event.target.value,
-        });
-    }
     
-    handleSubmit(event) {
-        event.preventDefault();    
-
-        this.setState({
-            previousFilterKeyword: this.state.filterKeyword,
-        });
-        
-        //search with query string
-        const keyword = this.state.filterKeyword.toLowerCase();
-        let pageIndex = undefined;
-
-        console.log("keyword is: ", keyword);
-        console.log("prev keyword is: ", this.state.previousFilterKeyword.toLowerCase() );
-
-        if( keyword != this.state.previousFilterKeyword.toLowerCase() ) {
-            // need to reset pageIndex to 1 if new keyword            
-            pageIndex = 1;
-            console.log("different keyword: pageIndex: ", pageIndex);
-            this.props.history.push('/page/1');
-
-        } else {            
-            pageIndex = this.getPageIndex( this.props );
-            console.log("same keyword: pageIndex: ", pageIndex);
-        }  
-
-        this.getEvents( pageIndex, keyword );        
-    }
 
     render() {
         //console.log("this.state", this.state);
@@ -134,18 +135,13 @@ class EventsList extends React.Component {
                     <div>
                         <h1>Events List</h1>
 
-                        <form onSubmit={ this.handleSubmit.bind(this) }>
-                            <label>
-                                Title: 
-                                <input type="text" name="keyword"
-                                    value={ this.state.filterKeyword }
-                                    onChange={ this.handleChangeKeyword.bind(this) }
-                                    placeholder="eg Band"
-                                />
-                            </label>
-                            <input type="submit" value="Search"  />
-                        </form>
-                        <br /><br />
+                        <SearchField 
+                            filterKeyword={this.state.filterKeyword} 
+                            previousFilterKeyword={this.state.previousFilterKeyword} 
+                            onChangeKeyword={this.handleChangeKeyword.bind(this)}
+                            onSubmit={this.handleSubmit.bind(this)}
+                        />
+                        
 
                         { 
                             this.state.events.map( event =>
