@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import * as Constants from './constants';
 import EventsService from './EventsService';
-import { Link } from 'react-router-dom';
-import { withRouter } from "react-router"
+import { withRouter } from "react-router";
 import './EventsList.scss';
 import SearchField from './SearchField';
 import SearchResults from './SearchResults';
+import Pagination from './Pagination';
 
 class EventsList extends React.Component {
     constructor(props) {
@@ -20,44 +20,25 @@ class EventsList extends React.Component {
         }
 
         this.eventsService = new EventsService();
+
+        this.getPageIndex = this.getPageIndex.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeKeyword = this.handleChangeKeyword.bind(this);
+    }
+
+
+    getPageIndex(properties) { //
+        console.log("$$$$$$$$$$$ getPageIndex prop: ", properties);//properties
+        //get page number from URL, not State
+        if(properties.match && properties.match.params && properties.match.params.number){
+            console.log("has params number ", properties.match.params.number)
+            return parseInt(properties.match.params.number);
+        } else {
+            console.log("no params number")
+            return 1;
+        }
     }
     
-    getPageIndex(prop) {
-        console.log("getPageIndex prop: ", prop);
-        //get page number from URL
-        if(prop.match.params.number){
-            return parseInt(prop.match.params.number);
-        } else {
-            return 1;
-        }
-    }
-
-    getTotalPages() {
-        return this.state.totalPages;
-    }
-
-    getNextPageIndex(properties) {
-        const currentPageIndex = this.getPageIndex(properties);
-        const nextPageIndex = currentPageIndex + 1;
-        const totalPages = this.getTotalPages();
-
-        if( nextPageIndex < totalPages ) {
-            return nextPageIndex;
-        } else {
-            return totalPages;
-        }        
-    }
-
-    getPrevPageIndex(properties) {
-        const currentPageIndex = this.getPageIndex(properties);
-        const prevPageIndex = currentPageIndex - 1;
-        if( prevPageIndex >= 1 ) {
-            return prevPageIndex;
-        } else {
-            return 1;
-        }
-    }
-
     getEvents( pageNum, searchKeyword ) {
         this.eventsService.getEvents( pageNum, searchKeyword )
             .then( response => {
@@ -66,9 +47,7 @@ class EventsList extends React.Component {
                 this.setState(
                     {
                         events: response.data,
-
                         totalPages: Math.floor( response.meta.total / Constants.EVENTS_PER_PAGE ) + 1,
-
                         loading: false, 
                     }
                 );
@@ -100,7 +79,7 @@ class EventsList extends React.Component {
         console.log("keyword is: ", keyword);
         console.log("prev keyword is: ", this.state.previousFilterKeyword.toLowerCase() );
 
-        if( keyword != this.state.previousFilterKeyword.toLowerCase() ) {
+        if( keyword !== this.state.previousFilterKeyword.toLowerCase() ) {
             // need to reset pageIndex to 1 if new keyword            
             pageIndex = 1;
             console.log("different keyword: pageIndex: ", pageIndex);
@@ -114,13 +93,15 @@ class EventsList extends React.Component {
         this.getEvents( pageIndex, keyword );  
     }
 
-    componentDidMount() {           
+    componentDidMount() {       
+        console.log("EVENTSLIST :: componentDidMount ")    
         const pageIndex = this.getPageIndex( this.props );
         const keyword = this.state.filterKeyword.toLowerCase();
         this.getEvents( pageIndex, keyword );
     }
 
     componentDidUpdate(prevProps, prevState) {
+        console.log("EVENTSLIST :: componentDidUpdate ") 
         const pageIndex = this.getPageIndex( this.props );
         const keyword = this.state.filterKeyword.toLowerCase();
 
@@ -141,54 +122,18 @@ class EventsList extends React.Component {
                         <h1>Events List</h1>
 
                         <SearchField 
-                            onChangeKeyword={this.handleChangeKeyword.bind(this)}
-                            onSubmit={this.handleSubmit.bind(this)}
+                            onChangeKeyword={this.handleChangeKeyword}
+                            onSubmit={this.handleSubmit}
                         />
 
                         <SearchResults
                             events={this.state.events} 
-                        />                       
+                        />    
 
-                        
-                        
-                        <hr />
-                        
-                        <Link 
-                            to={'/page/' + 1 } 
-                            //onClick={ (ev) => this.handleBeginningClick(ev) }                            
-                            className={ this.getPageIndex(this.props) === 1 ? 'button page' + ' disabled' : 'button page' }
-                        >
-                            &laquo; Start 
-                        </Link>&nbsp;
-
-                        <Link 
-                            to={'/page/' + this.getPrevPageIndex(this.props) } 
-                            className={ this.getPageIndex(this.props) === 1 ? 'button page' + ' disabled' : 'button page' }
-                        >
-                            &lt; Prev
-                        </Link>&nbsp;
-
-                        Page { this.getPageIndex(this.props) } / { this.getTotalPages() }
-                        &nbsp;
-
-                        <Link 
-                            to={'/page/' + this.getNextPageIndex(this.props) } 
-                            className={ this.getPageIndex(this.props) === this.getTotalPages() ? 'button page' + ' disabled' : 'button page' }
-                        >
-                            Next &gt;
-                        </Link>&nbsp;
-
-                        <Link 
-                            to={'/page/' + this.getTotalPages() } 
-                            className={ this.getPageIndex(this.props) === this.getTotalPages() ? 'button page' + ' disabled' : 'button page' }
-                        >
-                            End &raquo;                        
-                        </Link>
-
-
-
-
-
+                        <Pagination 
+                            totalPages={this.state.totalPage}
+                            currentPageIndex={this.getPageIndex}
+                        />
                     </div>
                 }        
             </div>
