@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { withRouter } from "react-router"
 import './EventsList.scss';
 import SearchField from './SearchField';
+import SearchResults from './SearchResults';
 
 class EventsList extends React.Component {
     constructor(props) {
@@ -19,38 +20,6 @@ class EventsList extends React.Component {
         }
 
         this.eventsService = new EventsService();
-    }
-
-    handleChangeKeyword(keyword) {
-        this.setState({                 
-            filterKeyword: keyword,
-        });
-    }
-    
-    handleSubmit() {
-        this.setState({
-            previousFilterKeyword: this.state.filterKeyword,
-        });
-        
-        //search with query string
-        const keyword = this.state.filterKeyword.toLowerCase();
-        let pageIndex = undefined;
-
-        console.log("keyword is: ", keyword);
-        console.log("prev keyword is: ", this.state.previousFilterKeyword.toLowerCase() );
-
-        if( keyword != this.state.previousFilterKeyword.toLowerCase() ) {
-            // need to reset pageIndex to 1 if new keyword            
-            pageIndex = 1;
-            console.log("different keyword: pageIndex: ", pageIndex);
-            this.props.history.push('/page/1');
-
-        } else {            
-            pageIndex = this.getPageIndex( this.props );
-            console.log("same keyword: pageIndex: ", pageIndex);
-        }  
-
-        this.getEvents( pageIndex, keyword );  
     }
     
     getPageIndex(prop) {
@@ -106,6 +75,38 @@ class EventsList extends React.Component {
               }
             );
     }
+    
+    handleChangeKeyword(keyword) {
+        this.setState({                 
+            filterKeyword: keyword,
+        });
+    }
+    
+    handleSubmit() {
+        this.setState({
+            previousFilterKeyword: this.state.filterKeyword,
+        });
+        
+        //search with query string
+        const keyword = this.state.filterKeyword.toLowerCase();
+        let pageIndex = undefined;
+
+        console.log("keyword is: ", keyword);
+        console.log("prev keyword is: ", this.state.previousFilterKeyword.toLowerCase() );
+
+        if( keyword != this.state.previousFilterKeyword.toLowerCase() ) {
+            // need to reset pageIndex to 1 if new keyword            
+            pageIndex = 1;
+            console.log("different keyword: pageIndex: ", pageIndex);
+            this.props.history.push('/page/1');
+
+        } else {            
+            pageIndex = this.getPageIndex( this.props );
+            console.log("same keyword: pageIndex: ", pageIndex);
+        }  
+
+        this.getEvents( pageIndex, keyword );  
+    }
 
     componentDidMount() {           
         const pageIndex = this.getPageIndex( this.props );
@@ -121,9 +122,7 @@ class EventsList extends React.Component {
             this.getEvents( pageIndex, keyword );
         }
     }
-
-    
-
+  
     render() {
         //console.log("this.state", this.state);
         console.log("************** EventsList :: render :: props: ", this.props);
@@ -139,35 +138,11 @@ class EventsList extends React.Component {
                             onChangeKeyword={this.handleChangeKeyword.bind(this)}
                             onSubmit={this.handleSubmit.bind(this)}
                         />
-                        
 
-                        { 
-                            this.state.events.map( event =>
-                                <h3 key={event.id}>
-                                    <Link to={'/event/' + event.id}>
-                                        { event.name } 
+                        <SearchResults
+                            events={this.state.events} 
+                        />                       
 
-                                        <br />
-                                        {
-                                            ' (' + 
-                                            new Date(event.time_start).getDate() + '-' + 
-                                            (new Date(event.time_start).getMonth()+1) + '-' + 
-                                            new Date(event.time_start).getFullYear() + ', ' + 
-                                            new Date(event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' - ' 
-                                        }
-
-                                        {
-                                            new Date(event.time_start).getDate() + '-' + 
-                                            (new Date(event.time_start).getMonth()+1) + '-' + 
-                                            new Date(event.time_start).getFullYear() + ', ' + 
-                                            new Date(event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ')' 
-                                        }
-                                    </Link>
-                                </h3>
-                            )
-                        }  
-
-                        <br />
                         <hr />
                         
                         <Link 
@@ -201,6 +176,10 @@ class EventsList extends React.Component {
                         >
                             End &raquo;                        
                         </Link>
+
+
+
+
 
                     </div>
                 }        
