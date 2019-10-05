@@ -24,6 +24,7 @@ class EventsList extends React.Component {
     
     getPageIndex(prop) {
         console.log("getPageIndex prop: ", prop);
+        //get page number from URL
         if(prop.match.params.number){
             return parseInt(prop.match.params.number);
         } else {
@@ -31,14 +32,19 @@ class EventsList extends React.Component {
         }
     }
 
+    getTotalPages() {
+        return this.state.totalPages;
+    }
+
     getNextPageIndex(properties) {
         const currentPageIndex = this.getPageIndex(properties);
         const nextPageIndex = currentPageIndex + 1;
+        const totalPages = this.getTotalPages();
 
-        if( nextPageIndex < this.state.totalPages ) {
+        if( nextPageIndex < totalPages ) {
             return nextPageIndex;
         } else {
-            return this.state.totalPages;
+            return totalPages;
         }        
     }
 
@@ -143,6 +149,8 @@ class EventsList extends React.Component {
                             events={this.state.events} 
                         />                       
 
+                        
+                        
                         <hr />
                         
                         <Link 
@@ -160,19 +168,19 @@ class EventsList extends React.Component {
                             &lt; Prev
                         </Link>&nbsp;
 
-                        Page { this.getPageIndex(this.props) } / { this.state.totalPages }
+                        Page { this.getPageIndex(this.props) } / { this.getTotalPages() }
                         &nbsp;
 
                         <Link 
                             to={'/page/' + this.getNextPageIndex(this.props) } 
-                            className={ this.getPageIndex(this.props) === this.state.totalPages ? 'button page' + ' disabled' : 'button page' }
+                            className={ this.getPageIndex(this.props) === this.getTotalPages() ? 'button page' + ' disabled' : 'button page' }
                         >
                             Next &gt;
                         </Link>&nbsp;
 
                         <Link 
-                            to={'/page/' + this.state.totalPages } 
-                            className={ this.getPageIndex(this.props) === this.state.totalPages ? 'button page' + ' disabled' : 'button page' }
+                            to={'/page/' + this.getTotalPages() } 
+                            className={ this.getPageIndex(this.props) === this.getTotalPages() ? 'button page' + ' disabled' : 'button page' }
                         >
                             End &raquo;                        
                         </Link>
