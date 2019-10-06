@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.scss';
-import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import EventsList from './EventsList';
 import Event from './Event';
 
@@ -9,27 +9,25 @@ class App extends Component {
     return (
       <div className="App">
         <Router>
-          <div>
+          <Switch>
             <Route
               path="/page/:number" 
+              exact
               component={EventsList}
             />
 
             <Route
               path="/event/:id" 
+              exact
               component={Event}
             />   
 
             <Redirect 
-              from='/#/'
+              from='/'
               to='/page/1' 
             />
 
-            <Redirect 
-              from='/#'
-              to='/page/1' 
-            />
-          </div>
+          </Switch>
         </Router>  
       </div>
     );
