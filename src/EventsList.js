@@ -74,16 +74,16 @@ class EventsList extends React.Component {
         console.log("@@@@@@@@@@@@@@ EventList :: handleCancel")
 
         //ERROR: resetting string only works after this function finishes...
-        /*
         this.setState({
             filterKeyword: '',
         });
-        */
 
+        /*
         this.setState( (state, props) => {
             return { filterKeyword: '' };
         });
-
+        */
+       
         //search with query string
         const keyword = this.getFilterKeyword();
         let pageIndex = undefined;
@@ -144,10 +144,19 @@ class EventsList extends React.Component {
         const keyword = this.getFilterKeyword();
 
         if( pageIndex !== this.getPageIndex( prevProps ) ){
+            console.log("pageIndex is different from last time")
+            this.getEvents( pageIndex, keyword );
+        }        
+
+        /*
+        if( keyword !== this.getPreviousFilterKeyword() ) {
+            console.log("keyword is different from previousKeyword")
             this.getEvents( pageIndex, keyword );
         }
+        */
     }
-  
+
+    
     render() {
         console.log("this.state", this.state);
         const pageIndex = this.getPageIndex( this.props );
