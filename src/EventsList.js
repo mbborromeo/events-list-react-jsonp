@@ -86,7 +86,7 @@ class EventsList extends React.Component {
         console.log("this.state.previousFilterKeyword is: ", this.state.previousFilterKeyword);
 
         if( keyword != this.getPreviousFilterKeyword() ) {
-            console.log("!!!!!!!!!!!! DIFFERENT")
+            console.log("~~~~~~~~ DIFFERENT")
 
             // need to reset pageIndex to 1 if new keyword            
             pageIndex = 1;
@@ -154,7 +154,7 @@ class EventsList extends React.Component {
                         <h1>Events List</h1>
 
                         <SearchField 
-                            //filterKeyword={this.getFilterKeyword}
+                            filterKeyword={ this.state.filterKeyword } //this.getFilterKeyword
                             onChangeKeyword={ this.handleChangeKeyword }
                             onCancel={ this.handleCancel }
                             onSubmit={ this.handleSubmit }

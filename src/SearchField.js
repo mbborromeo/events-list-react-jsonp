@@ -29,7 +29,7 @@ class SearchField extends React.Component {
                     <label>
                         Title: 
                         <input type="text" name="keyword"
-                            //value={ this.props.filterKeyword }
+                            value={ this.props.filterKeyword }
                             onChange={ this.handleChangeKeyword }
                             placeholder="eg Band"
                         />
