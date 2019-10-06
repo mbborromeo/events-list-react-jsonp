@@ -26,10 +26,10 @@ class SearchResults extends React.Component {
                                 }
 
                                 {
-                                    new Date(event.time_start).getDate() + '-' + 
-                                    (new Date(event.time_start).getMonth()+1) + '-' + 
-                                    new Date(event.time_start).getFullYear() + ', ' + 
-                                    new Date(event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ')' 
+                                    new Date(event.time_stop).getDate() + '-' + 
+                                    (new Date(event.time_stop).getMonth()+1) + '-' + 
+                                    new Date(event.time_stop).getFullYear() + ', ' + 
+                                    new Date(event.time_stop).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ')' 
                                 }
                             </Link>
                         </h3>
