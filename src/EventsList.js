@@ -143,7 +143,7 @@ class EventsList extends React.Component {
     }
   
     render() {
-        //console.log("this.state", this.state);
+        console.log("this.state", this.state);
         const pageIndex = this.getPageIndex( this.props );
 
         return (
