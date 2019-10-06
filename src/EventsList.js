@@ -29,7 +29,7 @@ class EventsList extends React.Component {
 
 
     getPageIndex(properties) { //
-        console.log("$$$$$$$$$$$ getPageIndex prop: ", properties);//properties
+        console.log("EventsList :: getPageIndex prop: ", properties);//properties
         //get page number from URL, not State
         if(properties.match && properties.match.params && properties.match.params.number){
             console.log("has params number ", properties.match.params.number)
@@ -100,16 +100,21 @@ class EventsList extends React.Component {
     }
 
     componentDidMount() {       
-        //console.log("EVENTSLIST :: componentDidMount ")    
+         
         const pageIndex = this.getPageIndex( this.props );
         const keyword = this.getFilterKeyword();
+
+        console.log("EVENTSLIST :: componentDidMount : pageIndex: ", pageIndex)   
+
         this.getEvents( pageIndex, keyword );
     }
 
     componentDidUpdate(prevProps, prevState) {
-        //console.log("EVENTSLIST :: componentDidUpdate ") 
+        
         const pageIndex = this.getPageIndex( this.props );
         const keyword = this.getFilterKeyword();
+
+        console.log("EVENTSLIST :: componentDidUpdate : pageIndex: ", pageIndex) 
 
         if( pageIndex !== this.getPageIndex( prevProps ) ){
             this.getEvents( pageIndex, keyword );
@@ -119,6 +124,7 @@ class EventsList extends React.Component {
     render() {
         //console.log("this.state", this.state);
         //console.log("************** EventsList :: render :: props: ", this.props);
+        const pageIndex = this.getPageIndex( this.props );
 
         return (
             <div>
@@ -138,8 +144,8 @@ class EventsList extends React.Component {
                         />    
 
                         <Pagination 
-                            totalPages={this.state.totalPage}
-                            currentPageIndex={this.getPageIndex}
+                            totalPages={this.state.totalPages}
+                            currentPageIndex={ pageIndex } //this.
                         />
                     </div>
                 }        

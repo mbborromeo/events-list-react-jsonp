@@ -5,22 +5,31 @@ class Pagination extends React.Component {
     constructor(props) {
         super(props);
 
-        this.getPageIndex = this.getPageIndex.bind(this);
+        //this.getPageIndex = this.getPageIndex.bind(this);
+        this.getTotalPages = this.getTotalPages.bind(this);
+
+        console.log("Pagination props : ", this.props);
     }
 
     getTotalPages() {
         return this.props.totalPages;
     }
 
-    getPageIndex(properties) {
+    /*
+    getPageIndex() { //properties
         //console.log("!!!!!!! call to EventsList :: getPageIndex")
-        this.props.currentPageIndex(properties);
+        //this.props.currentPageIndex(properties);
+        return this.props.currentPageIndex;
     }
+    */
     
     getNextPageIndex(properties) {
-        const currentPageIndex = this.getPageIndex(properties);
+        const currentPageIndex = this.props.currentPageIndex; //properties
         const nextPageIndex = currentPageIndex + 1;
         const totalPages = this.getTotalPages();
+
+        console.log("Pagination : getNextPageIndex :: currentPageIndex : ", currentPageIndex);
+        console.log("Pagination : getNextPageIndex :: nextPageIndex : ", nextPageIndex);
 
         if( nextPageIndex < totalPages ) {
             return nextPageIndex;
@@ -29,8 +38,8 @@ class Pagination extends React.Component {
         }        
     }
 
-    getPrevPageIndex(properties) {
-        const currentPageIndex = this.getPageIndex(properties);
+    getPrevPageIndex() { //properties
+        const currentPageIndex = this.props.currentPageIndex; //properties
         const prevPageIndex = currentPageIndex - 1;
         if( prevPageIndex >= 1 ) {
             return prevPageIndex;
@@ -39,13 +48,8 @@ class Pagination extends React.Component {
         }
     }
 
-    /*
-    componentDidMount() {
-        console.log("Pagination: componentDidMount!!!!!!!!!!!!");
-    }
-    */
-
     render () {
+
         return (
             <div>
                 <hr />
@@ -53,31 +57,31 @@ class Pagination extends React.Component {
                 <Link 
                     to={'/page/' + 1 } 
                     //onClick={ (ev) => this.handleBeginningClick(ev) }                            
-                    className={ this.getPageIndex(this.props) === 1 ? 'button page' + ' disabled' : 'button page' }
+                    className={ this.props.currentPageIndex === 1 ? 'button page' + ' disabled' : 'button page' }
                 >
                     &laquo; Start 
                 </Link>&nbsp;
 
                 <Link 
-                    to={'/page/' + this.getPrevPageIndex(this.props) } 
-                    className={ this.getPageIndex(this.props) === 1 ? 'button page' + ' disabled' : 'button page' }
+                    to={'/page/' + this.getPrevPageIndex() } 
+                    className={ this.props.currentPageIndex === 1 ? 'button page' + ' disabled' : 'button page' }
                 >
                     &lt; Prev
                 </Link>&nbsp;
 
-                Page { this.getPageIndex(this.props) } / { this.getTotalPages() }
+                Page { this.props.currentPageIndex } / { this.getTotalPages() }
                 &nbsp;
 
                 <Link 
-                    to={'/page/' + this.getNextPageIndex(this.props) } 
-                    className={ this.getPageIndex(this.props) === this.getTotalPages() ? 'button page' + ' disabled' : 'button page' }
+                    to={'/page/' + this.getNextPageIndex() } 
+                    className={ this.props.currentPageIndex === this.getTotalPages() ? 'button page' + ' disabled' : 'button page' }
                 >
                     Next &gt;
                 </Link>&nbsp;
 
                 <Link 
                     to={'/page/' + this.getTotalPages() } 
-                    className={ this.getPageIndex(this.props) === this.getTotalPages() ? 'button page' + ' disabled' : 'button page' }
+                    className={ this.props.currentPageIndex === this.getTotalPages() ? 'button page' + ' disabled' : 'button page' }
                 >
                     End &raquo;                        
                 </Link>
