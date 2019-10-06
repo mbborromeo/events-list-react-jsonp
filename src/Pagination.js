@@ -5,31 +5,17 @@ class Pagination extends React.Component {
     constructor(props) {
         super(props);
 
-        //this.getPageIndex = this.getPageIndex.bind(this);
         this.getTotalPages = this.getTotalPages.bind(this);
-
-        console.log("Pagination props : ", this.props);
     }
 
     getTotalPages() {
         return this.props.totalPages;
     }
-
-    /*
-    getPageIndex() { //properties
-        //console.log("!!!!!!! call to EventsList :: getPageIndex")
-        //this.props.currentPageIndex(properties);
-        return this.props.currentPageIndex;
-    }
-    */
     
-    getNextPageIndex(properties) {
-        const currentPageIndex = this.props.currentPageIndex; //properties
+    getNextPageIndex() {
+        const currentPageIndex = this.props.currentPageIndex;
         const nextPageIndex = currentPageIndex + 1;
         const totalPages = this.getTotalPages();
-
-        console.log("Pagination : getNextPageIndex :: currentPageIndex : ", currentPageIndex);
-        console.log("Pagination : getNextPageIndex :: nextPageIndex : ", nextPageIndex);
 
         if( nextPageIndex < totalPages ) {
             return nextPageIndex;
@@ -38,8 +24,8 @@ class Pagination extends React.Component {
         }        
     }
 
-    getPrevPageIndex() { //properties
-        const currentPageIndex = this.props.currentPageIndex; //properties
+    getPrevPageIndex() {
+        const currentPageIndex = this.props.currentPageIndex;
         const prevPageIndex = currentPageIndex - 1;
         if( prevPageIndex >= 1 ) {
             return prevPageIndex;

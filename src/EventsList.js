@@ -28,14 +28,11 @@ class EventsList extends React.Component {
     }
 
 
-    getPageIndex(properties) { //
-        console.log("EventsList :: getPageIndex prop: ", properties);//properties
+    getPageIndex(properties) {
         //get page number from URL, not State
-        if(properties.match && properties.match.params && properties.match.params.number){
-            console.log("has params number ", properties.match.params.number)
+        if(properties.match.params.number){
             return parseInt(properties.match.params.number);
         } else {
-            console.log("no params number")
             return 1;
         }
     }
@@ -43,7 +40,7 @@ class EventsList extends React.Component {
     getEvents( pageNum, searchKeyword ) {
         this.eventsService.getEvents( pageNum, searchKeyword )
             .then( response => {
-                console.log("EventsService :: response : ", response);                
+                //console.log("EventsService :: response : ", response);                
 
                 this.setState(
                     {
@@ -52,8 +49,6 @@ class EventsList extends React.Component {
                         loading: false, 
                     }
                 );
-
-                console.log("STATE is: ", this.state);
               }
             )
             .catch( function (error) {
@@ -72,8 +67,7 @@ class EventsList extends React.Component {
         });
     }
     
-    handleSubmit() {
-        //search with query string
+    handleSubmit() {        
         const keyword = this.getFilterKeyword();
         const previousKeyword = this.state.previousFilterKeyword.toLowerCase();
         let pageIndex = undefined;
@@ -82,39 +76,29 @@ class EventsList extends React.Component {
             previousFilterKeyword: keyword,
         });
 
-        console.log("keyword is: ", keyword);
-        console.log("prev keyword is: ",  );
-
-        if( keyword !== previousKeyword ) {
-            // need to reset pageIndex to 1 if new keyword            
+        // need to reset pageIndex to 1 if new keyword   
+        if( keyword !== previousKeyword ) {                     
             pageIndex = 1;
-            console.log("different keyword: pageIndex: ", pageIndex);
             this.props.history.push('/page/1');
 
         } else {            
             pageIndex = this.getPageIndex( this.props );
-            console.log("same keyword: pageIndex: ", pageIndex);
         }  
 
+        //search with query string
         this.getEvents( pageIndex, keyword );  
     }
 
-    componentDidMount() {       
-         
+    componentDidMount() {
         const pageIndex = this.getPageIndex( this.props );
         const keyword = this.getFilterKeyword();
-
-        console.log("EVENTSLIST :: componentDidMount : pageIndex: ", pageIndex)   
 
         this.getEvents( pageIndex, keyword );
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        
+    componentDidUpdate(prevProps, prevState) {        
         const pageIndex = this.getPageIndex( this.props );
         const keyword = this.getFilterKeyword();
-
-        console.log("EVENTSLIST :: componentDidUpdate : pageIndex: ", pageIndex) 
 
         if( pageIndex !== this.getPageIndex( prevProps ) ){
             this.getEvents( pageIndex, keyword );
@@ -123,7 +107,6 @@ class EventsList extends React.Component {
   
     render() {
         //console.log("this.state", this.state);
-        //console.log("************** EventsList :: render :: props: ", this.props);
         const pageIndex = this.getPageIndex( this.props );
 
         return (
@@ -135,17 +118,17 @@ class EventsList extends React.Component {
 
                         <SearchField 
                             //filterKeyword={this.getFilterKeyword}
-                            onChangeKeyword={this.handleChangeKeyword}
-                            onSubmit={this.handleSubmit}
+                            onChangeKeyword={ this.handleChangeKeyword }
+                            onSubmit={ this.handleSubmit }
                         />
 
                         <SearchResults
-                            events={this.state.events} 
+                            events={ this.state.events } 
                         />    
 
                         <Pagination 
-                            totalPages={this.state.totalPages}
-                            currentPageIndex={ pageIndex } //this.
+                            currentPageIndex={ pageIndex }
+                            totalPages={ this.state.totalPages }                            
                         />
                     </div>
                 }        
