@@ -22,16 +22,14 @@ class Event extends React.Component {
 
                 this.setState(
                     {
-                    event: response.data,
-                    loading: false,
+                        event: response.data,
+                        loading: false,
                     }
                 );
-                }
-            )
+            })
             .catch( function (error) {
                 console.log(error);
-            }
-            );
+            });
     }
     
     getEventID(properties) {
