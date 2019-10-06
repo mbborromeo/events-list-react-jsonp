@@ -154,13 +154,13 @@ class Event extends React.Component {
                         <br /><br />
 
                         <hr />
-                        <button      
-                            //to='/page/1'                       
-                            onClick={ () => this.props.history.goBack() }
+                        <Link 
+                            to={'/'}
                             className='button back'
+                            //<button onClick={ () => this.props.history.goBack() }>
                         >
-                            &lt; Back
-                        </button>
+                            &lt; Back 
+                        </Link>
                     </div>
                 }
             </div>
