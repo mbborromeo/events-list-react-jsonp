@@ -56,24 +56,18 @@ class Event extends React.Component {
     }
 
     handleImageLoaded() {
-        console.log("************* handlieImageLoaded")
-        
         this.setState({ 
             loadingImage: false,
         });
     }
 
-    handleImageError() {
-        console.log("************* handlieImageLoaded")
-        
+    handleImageError() {        
         this.setState({ 
             imageError: true,
         });
     }
 
     render() {
-        console.log("&&&&&&&&&&&& this.state is: ", this.state);
-
         return (
             <div>
                 { this.state.loading ?

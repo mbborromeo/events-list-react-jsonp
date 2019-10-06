@@ -23,9 +23,9 @@ class EventsList extends React.Component {
         this.getPageIndex = this.getPageIndex.bind(this);
         this.getFilterKeyword = this.getFilterKeyword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChangeKeyword = this.handleChangeKeyword.bind(this);        
+        this.handleChangeKeyword = this.handleChangeKeyword.bind(this);   
+        this.handleCancel = this.handleCancel.bind(this);
     }
-
 
     getPageIndex(properties) {
         //get page number from URL, not State
@@ -59,25 +59,63 @@ class EventsList extends React.Component {
     getFilterKeyword() {
         return this.state.filterKeyword.toLowerCase();
     }
+
+    getPreviousFilterKeyword() {
+        return this.state.previousFilterKeyword.toLowerCase();
+    }
     
     handleChangeKeyword(keyword) {
         this.setState({                 
             filterKeyword: keyword,
         });
     }
+
+    handleCancel() {
+        console.log("@@@@@@@@@@@@@@ EventList :: handleCancel")
+
+        //ERROR: resetting string only works after this function finishes...
+        this.setState({
+            filterKeyword: '',
+        });
+
+        //search with query string
+        const keyword = this.getFilterKeyword();
+        let pageIndex = undefined;
+
+        console.log("this.state.filterKeyword is: ", this.state.filterKeyword);
+        console.log("this.state.previousFilterKeyword is: ", this.state.previousFilterKeyword);
+
+        if( keyword != this.getPreviousFilterKeyword() ) {
+            console.log("~~~~~~~~ DIFFERENT")
+
+            // need to reset pageIndex to 1 if new keyword            
+            pageIndex = 1;
+            
+            this.setState({
+                previousFilterKeyword: keyword,
+            });                         
+            
+            //force update URL in browser
+            this.props.history.push('/page/1');
+
+            //load events according to page number and keyword
+            this.getEvents( pageIndex, keyword ); 
+        }
+    }
     
     handleSubmit() {        
         const keyword = this.getFilterKeyword();
-        const previousKeyword = this.state.previousFilterKeyword.toLowerCase();
+        const previousKeyword = this.getPreviousFilterKeyword();
         let pageIndex = undefined;
-
-        this.setState({
-            previousFilterKeyword: keyword,
-        });
 
         // need to reset pageIndex to 1 if new keyword   
         if( keyword !== previousKeyword ) {                     
             pageIndex = 1;
+                
+            this.setState({
+                previousFilterKeyword: keyword,
+            });
+
             this.props.history.push('/page/1');
 
         } else {            
@@ -87,7 +125,7 @@ class EventsList extends React.Component {
         //search with query string
         this.getEvents( pageIndex, keyword );  
     }
-
+    
     componentDidMount() {
         const pageIndex = this.getPageIndex( this.props );
         const keyword = this.getFilterKeyword();
@@ -105,7 +143,7 @@ class EventsList extends React.Component {
     }
   
     render() {
-        //console.log("this.state", this.state);
+        console.log("this.state", this.state);
         const pageIndex = this.getPageIndex( this.props );
 
         return (
@@ -116,8 +154,9 @@ class EventsList extends React.Component {
                         <h1>Events List</h1>
 
                         <SearchField 
-                            //filterKeyword={this.getFilterKeyword}
+                            filterKeyword={ this.state.filterKeyword } //this.getFilterKeyword
                             onChangeKeyword={ this.handleChangeKeyword }
+                            onCancel={ this.handleCancel }
                             onSubmit={ this.handleSubmit }
                         />
 

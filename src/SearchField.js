@@ -5,10 +5,16 @@ class SearchField extends React.Component {
         super(props);
 
         this.handleChangeKeyword = this.handleChangeKeyword.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
     }
 
     handleChangeKeyword(event){
         this.props.onChangeKeyword(event.target.value);
+    }
+
+    handleCancel(event) {
+        event.preventDefault();
+        this.props.onCancel();
     }
 
     handleSubmit(event) {
@@ -23,12 +29,13 @@ class SearchField extends React.Component {
                     <label>
                         Title: 
                         <input type="text" name="keyword"
-                            //value={ this.props.filterKeyword }
+                            value={ this.props.filterKeyword }
                             onChange={ this.handleChangeKeyword }
                             placeholder="eg Band"
                         />
                     </label>
                     <input type="submit" value="Search"  />
+                    <input type="reset" value="Cancel" onClick={ this.handleCancel } />
                 </form>
                 <br /><br />
             </div>
