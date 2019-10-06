@@ -139,7 +139,7 @@ class Event extends React.Component {
 
                                 <img 
                                     src={ this.state.event.thumbnail_image_url }
-                                    alt=""
+                                    alt="Image"
                                     onLoad={ this.handleImageLoaded }
                                     onError={ this.handleImageError }
                                 />
