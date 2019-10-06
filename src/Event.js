@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
-import { withRouter } from "react-router"
+import { withRouter } from "react-router";
+import './Event.scss';
 
 class Event extends React.Component {
     constructor(props) {
@@ -9,10 +10,14 @@ class Event extends React.Component {
 
         this.state = {
             loading: true,
-            event: [],        
+            event: [],
+            loadingImage: true,
+            imageError: false,
         }
         
         this.eventsService = new EventsService();
+        this.handleImageLoaded = this.handleImageLoaded.bind(this);
+        this.handleImageError = this.handleImageError.bind(this);
     }
 
     getEvent( id ) {
@@ -50,8 +55,24 @@ class Event extends React.Component {
         }
     }
 
+    handleImageLoaded() {
+        console.log("************* handlieImageLoaded")
+        
+        this.setState({ 
+            loadingImage: false,
+        });
+    }
+
+    handleImageError() {
+        console.log("************* handlieImageLoaded")
+        
+        this.setState({ 
+            imageError: true,
+        });
+    }
+
     render() {
-        console.log("this.state.event is: ", this.state.event);
+        console.log("&&&&&&&&&&&& this.state is: ", this.state);
 
         return (
             <div>
@@ -105,15 +126,25 @@ class Event extends React.Component {
                         <div>
                             Description: { this.state.event.description ? this.state.event.description : "" }
                         </div>
-                        
-                        <div>
-                            { (this.state.event.thumbnail_image_url && this.state.event.name) &&
+                    
+                        { this.state.event.thumbnail_image_url &&
+                            <div className='image-event'>
+                                { (this.state.loadingImage && this.state.imageError===false) &&
+                                    <span className="loading">loading... </span>
+                                }  
+
+                                { this.state.imageError && 
+                                    <span className="error">error! </span>
+                                }  
+
                                 <img 
                                     src={ this.state.event.thumbnail_image_url }
-                                    alt={ 'Image of event ' + this.state.event.name } 
+                                    alt=""
+                                    onLoad={ this.handleImageLoaded }
+                                    onError={ this.handleImageError }
                                 />
-                            }                            
-                        </div>
+                            </div>   
+                        }                        
 
                         <div>
                             Event ID: 

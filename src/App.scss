@@ -20,3 +20,29 @@
 .App-link {
   color: #09d3ac;
 }
+
+h3 {
+  a {
+      text-decoration: none;
+
+      &:hover {
+          text-decoration: underline;
+      }
+  }
+}
+
+.button {
+  border: 1px solid black;
+  text-decoration: none;
+
+  &.disabled {
+      pointer-events: none;
+      color: grey;
+      border: 1px solid grey;
+      opacity: 0.5;
+  }
+
+  &:hover {
+      background-color: yellow;
+  }
+}
