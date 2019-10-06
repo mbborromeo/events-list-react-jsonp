@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
-import { withRouter } from "react-router"
+import { withRouter } from "react-router";
+import './Event.scss';
 
 class Event extends React.Component {
     constructor(props) {
@@ -9,10 +10,14 @@ class Event extends React.Component {
 
         this.state = {
             loading: true,
-            event: [],        
+            event: [],
+            loadingImage: true,
+            imageError: false,
         }
         
         this.eventsService = new EventsService();
+        this.handleImageLoaded = this.handleImageLoaded.bind(this);
+        this.handleImageError = this.handleImageError.bind(this);
     }
 
     getEvent( id ) {
@@ -22,16 +27,14 @@ class Event extends React.Component {
 
                 this.setState(
                     {
-                    event: response.data,
-                    loading: false,
+                        event: response.data,
+                        loading: false,
                     }
                 );
-                }
-            )
+            })
             .catch( function (error) {
                 console.log(error);
-            }
-            );
+            });
     }
     
     getEventID(properties) {
@@ -52,92 +55,106 @@ class Event extends React.Component {
         }
     }
 
-    render() {
-        //console.log("this.state.event is: ", this.state.event);
+    handleImageLoaded() {
+        this.setState({ 
+            loadingImage: false,
+        });
+    }
 
+    handleImageError() {        
+        this.setState({ 
+            imageError: true,
+        });
+    }
+
+    render() {
         return (
             <div>
                 { this.state.loading ?
                     <div>Loading event</div> :
-                    <div>
-                        { this.state.event.name &&
-                            <h1>
-                                { this.state.event.name }                                
-                            </h1>
-                        }
-
-                        { this.state.event.description &&
-                            <div>
-                                Description: { this.state.event.description }<br />
-                            </div>
-                        }
+                    <div>                        
+                        <h1>
+                            { this.state.event.name ? this.state.event.name : "" }                                
+                        </h1>
                         
-                        { this.state.event.categories && this.state.event.categories.length>0 &&
-                            <div>
-                                Categories: 
-                                {
-                                    this.state.event.categories.map(
-                                        (category) => <span key={ category.id }>{ category.name + ' ' }</span>
-                                    )
-                                }
-                            </div>
-                        }
+                        <div>
+                            Location: 
+                            { (this.state.event.location && this.state.event.location.name) ?
+                                ' ' + this.state.event.location.name
+                                : ""
+                            }
+                        </div>
+                                               
+                        <div>
+                            From: 
+                            { this.state.event.time_start ?
+                                ' ' + new Date(this.state.event.time_start).getDate() + '-' + 
+                                (new Date(this.state.event.time_start).getMonth()+1) + '-' + 
+                                new Date(this.state.event.time_start).getFullYear() + ', ' + 
+                                new Date(this.state.event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' 
+                                : ""
+                            }
+                        </div>
 
-                        { this.state.event.time_start &&
-                            <div>
-                                From: 
-                                { 
-                                    ' ' + new Date(this.state.event.time_start).getDate() + '-' + 
-                                    (new Date(this.state.event.time_start).getMonth()+1) + '-' + 
-                                    new Date(this.state.event.time_start).getFullYear() + ', ' + 
-                                    new Date(this.state.event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' 
-                                 }
-                                <br />
-                            </div>
-                        }
+                        <div>
+                            To: 
+                            { this.state.event.time_stop ?
+                                ' ' + new Date(this.state.event.time_stop).getDate() + '-' + 
+                                (new Date(this.state.event.time_stop).getMonth()+1) + '-' + 
+                                new Date(this.state.event.time_stop).getFullYear() + ', ' + 
+                                new Date(this.state.event.time_stop).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' '
+                                : ""
+                            }
+                        </div>
 
-                        { this.state.event.time_stop &&
-                            <div>
-                                To: 
-                                { 
-                                    ' ' + new Date(this.state.event.time_stop).getDate() + '-' + 
-                                    (new Date(this.state.event.time_stop).getMonth()+1) + '-' + 
-                                    new Date(this.state.event.time_stop).getFullYear() + ', ' + 
-                                    new Date(this.state.event.time_stop).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' '
-                                }
-                                <br />
-                            </div>
-                        }
+                        <div>
+                            Categories:&nbsp;
+                            { (this.state.event.categories && this.state.event.categories.length>0 ) ? 
+                                this.state.event.categories.map(
+                                    (category) => <span key={ category.id }>{ category.name + ' ' }</span>
+                                )
+                                : ""
+                            }
+                        </div>
 
-                        { this.state.event.location && this.state.event.location.name &&
-                            <div>
-                                Location: { this.state.event.location.name }<br />
-                            </div>
-                        }
-
-                        
-                        { this.state.event.id &&
-                            <div>
-                                Event ID: { this.state.event.id }
-                            </div>
-                        }
-                        
+                        <div>
+                            Description: { this.state.event.description ? this.state.event.description : "" }
+                        </div>
+                    
                         { this.state.event.thumbnail_image_url &&
-                            <div>
-                                <img src={ this.state.event.thumbnail_image_url } />
-                            </div>
-                        }
+                            <div className='image-event'>
+                                { (this.state.loadingImage && this.state.imageError===false) &&
+                                    <span className="loading">loading... </span>
+                                }  
+
+                                { this.state.imageError && 
+                                    <span className="error">error! </span>
+                                }  
+
+                                <img 
+                                    src={ this.state.event.thumbnail_image_url }
+                                    alt="Image"
+                                    onLoad={ this.handleImageLoaded }
+                                    onError={ this.handleImageError }
+                                />
+                            </div>   
+                        }                        
+
+                        <div>
+                            Event ID: 
+                            { this.state.event.id ? ' ' + this.state.event.id : "" }
+                        </div>
 
                         <br /><br />
 
                         <hr />
-                        <button      
-                            //to='/page/1'                       
-                            onClick={ () => this.props.history.goBack() }
+                        <Link 
+                            to={'/'}
                             className='button back'
+                            //<button onClick={ () => this.props.history.goBack() }>
                         >
-                            &lt; Back
-                        </button>
+                            &lt; Back 
+                        </Link>
                     </div>
                 }
             </div>
