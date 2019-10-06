@@ -51,7 +51,7 @@ class Event extends React.Component {
         const eventID = this.getEventID( this.props );
 
         if( eventID !== this.getEventID( prevProps ) ){
-          this.getEvent( eventID );
+            this.getEvent( eventID );
         }
     }
 

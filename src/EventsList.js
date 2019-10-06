@@ -48,11 +48,11 @@ class EventsList extends React.Component {
                         loading: false, 
                     }
                 );
-              }
+            }
             )
             .catch( function (error) {
                 console.log(error);
-              }
+            }
             );
     }
 
@@ -85,7 +85,7 @@ class EventsList extends React.Component {
         console.log("this.state.filterKeyword is: ", this.state.filterKeyword);
         console.log("this.state.previousFilterKeyword is: ", this.state.previousFilterKeyword);
 
-        if( keyword != this.getPreviousFilterKeyword() ) {
+        if( keyword !== this.getPreviousFilterKeyword() ) {
             console.log("~~~~~~~~ DIFFERENT")
 
             // need to reset pageIndex to 1 if new keyword            
