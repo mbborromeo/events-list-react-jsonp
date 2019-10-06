@@ -107,7 +107,12 @@ class Event extends React.Component {
                         </div>
                         
                         <div>
-                            <img src={ this.state.event.thumbnail_image_url ? this.state.event.thumbnail_image_url : "" } />
+                            { (this.state.event.thumbnail_image_url && this.state.event.name) &&
+                                <img 
+                                    src={ this.state.event.thumbnail_image_url }
+                                    alt={ 'Image of event ' + this.state.event.name } 
+                                />
+                            }                            
                         </div>
 
                         <div>
