@@ -35,7 +35,6 @@ class Pagination extends React.Component {
     }
 
     render () {
-
         return (
             <div>
                 <hr />
