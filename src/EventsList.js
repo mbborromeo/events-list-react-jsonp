@@ -74,8 +74,14 @@ class EventsList extends React.Component {
         console.log("@@@@@@@@@@@@@@ EventList :: handleCancel")
 
         //ERROR: resetting string only works after this function finishes...
+        /*
         this.setState({
             filterKeyword: '',
+        });
+        */
+
+        this.setState( (state, props) => {
+            return { filterKeyword: '' };
         });
 
         //search with query string
