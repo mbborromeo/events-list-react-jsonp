@@ -7,7 +7,7 @@ import SearchField from './SearchField';
 import SearchResults from './SearchResults';
 import Pagination from './Pagination';
 
-class EventsList extends React.Component {
+class EventsList extends React.Component {    
     constructor(props) {
         super(props);
 
@@ -22,8 +22,9 @@ class EventsList extends React.Component {
         this.eventsService = new EventsService();
 
         this.getPageIndex = this.getPageIndex.bind(this);
+        this.getFilterKeyword = this.getFilterKeyword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChangeKeyword = this.handleChangeKeyword.bind(this);
+        this.handleChangeKeyword = this.handleChangeKeyword.bind(this);        
     }
 
 
@@ -60,6 +61,10 @@ class EventsList extends React.Component {
               }
             );
     }
+
+    getFilterKeyword() {
+        return this.state.filterKeyword.toLowerCase();
+    }
     
     handleChangeKeyword(keyword) {
         this.setState({                 
@@ -68,18 +73,19 @@ class EventsList extends React.Component {
     }
     
     handleSubmit() {
-        this.setState({
-            previousFilterKeyword: this.state.filterKeyword,
-        });
-        
         //search with query string
-        const keyword = this.state.filterKeyword.toLowerCase();
+        const keyword = this.getFilterKeyword();
+        const previousKeyword = this.state.previousFilterKeyword.toLowerCase();
         let pageIndex = undefined;
 
-        console.log("keyword is: ", keyword);
-        console.log("prev keyword is: ", this.state.previousFilterKeyword.toLowerCase() );
+        this.setState({
+            previousFilterKeyword: keyword,
+        });
 
-        if( keyword !== this.state.previousFilterKeyword.toLowerCase() ) {
+        console.log("keyword is: ", keyword);
+        console.log("prev keyword is: ",  );
+
+        if( keyword !== previousKeyword ) {
             // need to reset pageIndex to 1 if new keyword            
             pageIndex = 1;
             console.log("different keyword: pageIndex: ", pageIndex);
@@ -94,16 +100,16 @@ class EventsList extends React.Component {
     }
 
     componentDidMount() {       
-        console.log("EVENTSLIST :: componentDidMount ")    
+        //console.log("EVENTSLIST :: componentDidMount ")    
         const pageIndex = this.getPageIndex( this.props );
-        const keyword = this.state.filterKeyword.toLowerCase();
+        const keyword = this.getFilterKeyword();
         this.getEvents( pageIndex, keyword );
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("EVENTSLIST :: componentDidUpdate ") 
+        //console.log("EVENTSLIST :: componentDidUpdate ") 
         const pageIndex = this.getPageIndex( this.props );
-        const keyword = this.state.filterKeyword.toLowerCase();
+        const keyword = this.getFilterKeyword();
 
         if( pageIndex !== this.getPageIndex( prevProps ) ){
             this.getEvents( pageIndex, keyword );
@@ -112,7 +118,7 @@ class EventsList extends React.Component {
   
     render() {
         //console.log("this.state", this.state);
-        console.log("************** EventsList :: render :: props: ", this.props);
+        //console.log("************** EventsList :: render :: props: ", this.props);
 
         return (
             <div>
@@ -122,6 +128,7 @@ class EventsList extends React.Component {
                         <h1>Events List</h1>
 
                         <SearchField 
+                            //filterKeyword={this.getFilterKeyword}
                             onChangeKeyword={this.handleChangeKeyword}
                             onSubmit={this.handleSubmit}
                         />

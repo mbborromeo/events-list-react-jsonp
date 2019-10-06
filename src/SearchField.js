@@ -4,6 +4,7 @@ class SearchField extends React.Component {
     constructor(props) {
         super(props);
 
+        this.handleChangeKeyword = this.handleChangeKeyword.bind(this);
     }
 
     handleChangeKeyword(event){
@@ -22,8 +23,8 @@ class SearchField extends React.Component {
                     <label>
                         Title: 
                         <input type="text" name="keyword"
-                            value={ this.props.filterKeyword }
-                            onChange={ this.handleChangeKeyword.bind(this) }
+                            //value={ this.props.filterKeyword }
+                            onChange={ this.handleChangeKeyword }
                             placeholder="eg Band"
                         />
                     </label>

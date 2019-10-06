@@ -6,7 +6,7 @@ const API_KEY = 'cc1-0befd4410327ac7b8c7f88e4ed466e87d6f78eff29de81c3ee4e28d79b6
 
 class EventsService {
     getEvents( currentPage=1, queryString="" ) {
-        console.log("------EventsService : getEvents() : currentPage: ", currentPage);
+        //console.log("------EventsService : getEvents() : currentPage: ", currentPage);
         
         return axios.jsonp(
             API_BASE,

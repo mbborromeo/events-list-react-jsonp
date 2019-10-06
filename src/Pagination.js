@@ -13,7 +13,7 @@ class Pagination extends React.Component {
     }
 
     getPageIndex(properties) {
-        console.log("!!!!!!! call to EventsList :: getPageIndex")
+        //console.log("!!!!!!! call to EventsList :: getPageIndex")
         this.props.currentPageIndex(properties);
     }
     
@@ -38,6 +38,12 @@ class Pagination extends React.Component {
             return 1;
         }
     }
+
+    /*
+    componentDidMount() {
+        console.log("Pagination: componentDidMount!!!!!!!!!!!!");
+    }
+    */
 
     render () {
         return (
