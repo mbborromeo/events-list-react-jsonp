@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import * as Constants from './constants';
 import EventsService from './EventsService';
 import { withRouter } from "react-router";
-import './EventsList.scss';
 import SearchField from './SearchField';
 import SearchResults from './SearchResults';
 import Pagination from './Pagination';
