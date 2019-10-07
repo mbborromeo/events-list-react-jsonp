@@ -14,7 +14,7 @@ class DateTimeFromTo extends React.Component {
 
     render () {
         return (
-            <div>
+            <span>
                 { this.props.time_start &&  
                     <span>
                         {
@@ -41,7 +41,7 @@ class DateTimeFromTo extends React.Component {
                         }
                     </span>
                 }
-            </div>
+            </span>
         );
     }
 }
