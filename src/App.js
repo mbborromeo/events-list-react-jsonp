@@ -24,17 +24,17 @@ class App extends Component {
                         />   
 
                         <Redirect 
-                          from='/'
-                          exact
-                          to='/page/1' 
+                            from='/'
+                            exact
+                            to='/page/1' 
                         />
                         
                         <Route component={PageNotFound} />
                     </Switch>
                 </Router>  
-      </div>
-    );
-  }
+            </div>
+        );
+    }
 }
 
 export default App;
