@@ -39,7 +39,6 @@ class Event extends React.Component {
     }
     
     getEventID(properties) {
-        //console.log("props are: ", properties);
         return properties.match.params.id;
     }
 
@@ -134,7 +133,6 @@ class Event extends React.Component {
                         <Link 
                             to={'/'}
                             className='button back'
-                            //<button onClick={ () => this.props.history.goBack() }>
                         >
                             &lt; Back 
                         </Link>
