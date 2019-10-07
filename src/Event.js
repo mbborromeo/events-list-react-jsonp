@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
+import DateTimeFromTo from './DateTimeFromTo';
 import './Event.scss';
 
 class Event extends React.Component {
@@ -38,7 +39,6 @@ class Event extends React.Component {
     }
     
     getEventID(properties) {
-        //console.log("props are: ", properties);
         return properties.match.params.id;
     }
 
@@ -78,33 +78,15 @@ class Event extends React.Component {
                         </h1>
                         
                         <div>
-                            Location: 
+                            Where:
                             { (this.state.event.location && this.state.event.location.name) ?
                                 ' ' + this.state.event.location.name
                                 : ""
                             }
                         </div>
-                                               
-                        <div>
-                            From: 
-                            { this.state.event.time_start ?
-                                ' ' + new Date(this.state.event.time_start).getDate() + '-' + 
-                                (new Date(this.state.event.time_start).getMonth()+1) + '-' + 
-                                new Date(this.state.event.time_start).getFullYear() + ', ' + 
-                                new Date(this.state.event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' 
-                                : ""
-                            }
-                        </div>
 
-                        <div>
-                            To: 
-                            { this.state.event.time_stop ?
-                                ' ' + new Date(this.state.event.time_stop).getDate() + '-' + 
-                                (new Date(this.state.event.time_stop).getMonth()+1) + '-' + 
-                                new Date(this.state.event.time_stop).getFullYear() + ', ' + 
-                                new Date(this.state.event.time_stop).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' '
-                                : ""
-                            }
+                        <div>When:&nbsp;
+                            <DateTimeFromTo time_start={this.state.event.time_start} time_stop={this.state.event.time_stop} />
                         </div>
 
                         <div>
@@ -151,7 +133,6 @@ class Event extends React.Component {
                         <Link 
                             to={'/'}
                             className='button back'
-                            //<button onClick={ () => this.props.history.goBack() }>
                         >
                             &lt; Back 
                         </Link>

@@ -3,6 +3,7 @@ import './App.scss';
 import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import EventsList from './EventsList';
 import Event from './Event';
+import PageNotFound from './PageNotFound';
 
 class App extends Component {
     render() {
@@ -23,15 +24,17 @@ class App extends Component {
                         />   
 
                         <Redirect 
-                            from='/'
-                            to='/page/1' 
+                          from='/'
+                          exact
+                          to='/page/1' 
                         />
-
+                        
+                        <Route component={PageNotFound} />
                     </Switch>
                 </Router>  
-            </div>
-        );
-    }
+      </div>
+    );
+  }
 }
 
 export default App;

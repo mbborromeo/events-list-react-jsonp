@@ -1,41 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import DateTimeFromTo from './DateTimeFromTo';
+import './SearchResults.scss';
 
 class SearchResults extends React.Component {
     constructor(props) {
         super(props);
-
     }
 
     render () {
         return (
             <div>
-                {
+                { this.props.events &&
                     this.props.events.map( event =>
-                        <h3 key={event.id}>
-                            <Link to={'/event/' + event.id}>
-                                { event.name } 
+                        <Link key={event.id} to={'/event/' + event.id}>
+                            { event.name && <h3>{ event.name }</h3> }
 
-                                <br />
-                                {
-                                    ' (' + 
-                                    new Date(event.time_start).getDate() + '-' + 
-                                    (new Date(event.time_start).getMonth()+1) + '-' + 
-                                    new Date(event.time_start).getFullYear() + ', ' + 
-                                    new Date(event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' - ' 
-                                }
+                            <DateTimeFromTo time_start={event.time_start} time_stop={event.time_stop} />
+                            <br />
 
-                                {
-                                    new Date(event.time_start).getDate() + '-' + 
-                                    (new Date(event.time_start).getMonth()+1) + '-' + 
-                                    new Date(event.time_start).getFullYear() + ', ' + 
-                                    new Date(event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ')' 
-                                }
-                            </Link>
-                        </h3>
+                        </Link>
                     )
                 }  
 
+                <br />
+                <br />
                 <br />
             </div>
         );
