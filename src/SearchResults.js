@@ -8,15 +8,18 @@ class SearchResults extends React.Component {
         return (
             <div>
                 { this.props.events &&
-                    this.props.events.map( event =>
-                        <Link key={event.id} to={'/event/' + event.id}>
-                            { event.name && <h3>{ event.name }</h3> }
+                    <ul>
+                        { this.props.events.map( event =>
+                            <li key={event.id}>
+                                <Link to={'/event/' + event.id}>
+                                    { event.name && <h3>{ event.name }</h3> }
 
-                            <DateTimeFromTo time_start={event.time_start} time_stop={event.time_stop} />
-                            <br />
-
-                        </Link>
-                    )
+                                    <DateTimeFromTo time_start={event.time_start} time_stop={event.time_stop} />
+                                </Link>
+                            </li>
+                        )
+                        }
+                    </ul>
                 }  
 
                 <br />
