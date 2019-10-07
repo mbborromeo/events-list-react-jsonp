@@ -24,8 +24,6 @@ class Event extends React.Component {
     getEvent( id ) {
         this.eventsService.getEvent( id )
             .then( response => {
-                //console.log("Event :: getEvent : ", response);
-
                 this.setState(
                     {
                         event: response.data,
