@@ -151,7 +151,7 @@ class EventsList extends React.Component {
                 { this.state.loading ?
                     <div>Loading events list</div> :
                     <div>
-                        <h1>Events List</h1>
+                        <h1>Events</h1>
 
                         <SearchField 
                             filterKeyword={ this.state.filterKeyword } //this.getFilterKeyword
