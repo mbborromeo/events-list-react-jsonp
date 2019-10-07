@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import * as Constants from './constants';
+import DateTimeFromTo from './DateTimeFromTo';
 
 class SearchResults extends React.Component {
     constructor(props) {
         super(props);
-
-        this.getMonthName = this.getMonthName.bind(this);
-    }
-
-    getMonthName(m) {
-        return Constants.MONTH_NAME[m];
     }
 
     render () {
-
-
         return (
             <div>
                 { this.props.events &&
@@ -25,25 +17,7 @@ class SearchResults extends React.Component {
                                 { event.name } 
                                 <br />
 
-                                {                                    
-                                    new Date(event.time_start).getDate() + ' ' + 
-                                    this.getMonthName( new Date(event.time_start).getMonth() ) + ' ' + 
-                                    new Date(event.time_start).getFullYear() + ', ' + 
-                                    new Date(event.time_start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' - ' 
-                                }
-
-                                { ( new Date(event.time_stop)!==new Date(event.time_start) && 
-                                    new Date(event.time_stop).getMonth()!==new Date(event.time_start).getMonth() &&
-                                    new Date(event.time_stop).getFullYear()!==new Date(event.time_start).getFullYear()
-                                  ) &&
-                                    new Date(event.time_stop).getDate() + ' ' + 
-                                    this.getMonthName( new Date(event.time_stop).getMonth() ) + ' ' + 
-                                    new Date(event.time_stop).getFullYear() + ', '
-                                }
-
-                                {
-                                    new Date(event.time_stop).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                                }
+                                <DateTimeFromTo time_start={event.time_start} time_stop={event.time_stop} />
                             </Link>
                         </h3>
                     )
