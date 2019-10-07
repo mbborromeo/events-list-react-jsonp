@@ -74,39 +74,49 @@ class EventsList extends React.Component {
         console.log("@@@@@@@@@@@@@@ EventList :: handleCancel")
 
         //ERROR: resetting string only works after this function finishes...
-        this.setState({
+        /* this.setState({
             filterKeyword: '',
         });
+        */
 
         /*
         this.setState( (state, props) => {
             return { filterKeyword: '' };
         });
         */
+
+        this.setState(
+            { filterKeyword: '', },
+            () => { //callback fires straight after filterKeyword has updated
+                console.log('this.state.filterKeyword has finished updating and is now:', this.state.filterKeyword, '.' );
+
+                //search with query string
+                const keyword = this.getFilterKeyword();
+                let pageIndex = undefined;
+
+                console.log("this.state.filterKeyword is: ", this.state.filterKeyword);
+                console.log("this.state.previousFilterKeyword is: ", this.state.previousFilterKeyword);
+
+                if( keyword != this.getPreviousFilterKeyword() ) {
+                    console.log("~~~~~~~~ DIFFERENT")
+
+                    // need to reset pageIndex to 1 if new keyword            
+                    pageIndex = 1;
+                    
+                    this.setState({
+                        previousFilterKeyword: keyword,
+                    });                         
+                    
+                    //force update URL in browser
+                    this.props.history.push('/page/1');
+
+                    //load events according to page number and keyword
+                    this.getEvents( pageIndex, keyword ); 
+                }
+            }
+        );
        
-        //search with query string
-        const keyword = this.getFilterKeyword();
-        let pageIndex = undefined;
-
-        console.log("this.state.filterKeyword is: ", this.state.filterKeyword);
-        console.log("this.state.previousFilterKeyword is: ", this.state.previousFilterKeyword);
-
-        if( keyword != this.getPreviousFilterKeyword() ) {
-            console.log("~~~~~~~~ DIFFERENT")
-
-            // need to reset pageIndex to 1 if new keyword            
-            pageIndex = 1;
-            
-            this.setState({
-                previousFilterKeyword: keyword,
-            });                         
-            
-            //force update URL in browser
-            this.props.history.push('/page/1');
-
-            //load events according to page number and keyword
-            this.getEvents( pageIndex, keyword ); 
-        }
+        
     }
     
     handleSubmit() {        
