@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as Constants from './constants';
 import EventsService from './EventsService';
-import { withRouter } from "react-router";
+//import { withRouter } from "react-router";
 import SearchField from './SearchField';
 import SearchResults from './SearchResults';
 import Pagination from './Pagination';
@@ -38,9 +38,7 @@ class EventsList extends React.Component {
     
     getEvents( pageNum, searchKeyword ) {
         this.eventsService.getEvents( pageNum, searchKeyword )
-            .then( response => {
-                //console.log("EventsService :: response : ", response);                
-
+            .then( response => {      
                 this.setState(
                     {
                         events: response.data,
@@ -48,12 +46,10 @@ class EventsList extends React.Component {
                         loading: false, 
                     }
                 );
-              }
-            )
+            })
             .catch( function (error) {
                 console.log(error);
-              }
-            );
+            });
     }
 
     getFilterKeyword() {
@@ -80,7 +76,7 @@ class EventsList extends React.Component {
                 let pageIndex = undefined;
 
                 // need to reset pageIndex to 1 if searching for new keyword
-                if( keyword != previousKeyword ) {                              
+                if( keyword !== previousKeyword ) {                              
                     pageIndex = 1;
                     
                     this.setState({
@@ -170,8 +166,9 @@ class EventsList extends React.Component {
     }
 }
 
-// Create a new component that is "connected" (to borrow redux
-// terminology) to the router.
+/*
+// Create a new component that is "connected" (to borrow redux terminology) to the router.
 const EventsListWithRouter = withRouter( EventsList );
+*/
 
 export default EventsList;

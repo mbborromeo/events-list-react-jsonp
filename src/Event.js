@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import EventsService from './EventsService';
 import { Link } from 'react-router-dom';
-import { withRouter } from "react-router";
+//import { withRouter } from "react-router";
 import DateTimeFromTo from './DateTimeFromTo';
 import './Event.scss';
 
@@ -51,7 +51,7 @@ class Event extends React.Component {
         const eventID = this.getEventID( this.props );
 
         if( eventID !== this.getEventID( prevProps ) ){
-          this.getEvent( eventID );
+            this.getEvent( eventID );
         }
     }
 
@@ -115,7 +115,7 @@ class Event extends React.Component {
 
                                 <img 
                                     src={ this.state.event.thumbnail_image_url }
-                                    alt="Image"
+                                    alt={ this.state.event.name ? "Image of " + this.state.event.name : "Image of event" }
                                     onLoad={ this.handleImageLoaded }
                                     onError={ this.handleImageError }
                                 />
@@ -143,6 +143,9 @@ class Event extends React.Component {
     }
 }
 
+/*
+// Create a new component that is "connected" (to borrow redux terminology) to the router.
 const EventWithRouter = withRouter( Event );
+*/
 
 export default Event;

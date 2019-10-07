@@ -4,10 +4,6 @@ import DateTimeFromTo from './DateTimeFromTo';
 import './SearchResults.scss';
 
 class SearchResults extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render () {
         return (
             <div>

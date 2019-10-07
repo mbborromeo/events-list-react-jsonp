@@ -31,7 +31,7 @@ class DateTimeFromTo extends React.Component {
                         { (new Date(this.props.time_stop)!==new Date(this.props.time_start) && 
                             new Date(this.props.time_stop).getMonth()!==new Date(this.props.time_start).getMonth() &&
                             new Date(this.props.time_stop).getFullYear()!==new Date(this.props.time_start).getFullYear()
-                          ) &&
+                        ) &&
                                 new Date(this.props.time_stop).getDate() + ' ' + 
                                 this.getMonthName( new Date(this.props.time_stop).getMonth() ) + ' ' + 
                                 new Date(this.props.time_stop).getFullYear() + ', '
