@@ -104,13 +104,15 @@ class EventsList extends React.Component {
         
         //if keyword is different from last search
         if( submittedFilterKeyword !== this.getSubmittedFilterKeyword( prevState ) ) {
+            console.log("componentDidUpdate :: submittedFilterKeyword DIFFERNT - submittedFilterKeyword is: ", submittedFilterKeyword)   
+
             //reset to first page of results
             pageIndex = 1; 
 
             //force update URL in browser
+            console.log("force page reload with PAGE 1")
             this.props.history.push('/page/1');
-
-            console.log("componentDidUpdate :: submittedFilterKeyword DIFFERNT ", submittedFilterKeyword)   
+            
             this.getEvents( pageIndex, submittedFilterKeyword );         
         } else if( submittedFilterKeyword === this.getSubmittedFilterKeyword( prevState ) && pageIndex !== this.getPageIndex( prevProps ) ) {
             console.log("componentDidUpdate :: submittedFilterKeyword SAME, pageIndex DIFFERNT : pageIndex", pageIndex )
