@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import {RouteComponentProps, withRouter} from "react-router";
+import { domainToASCII } from 'url';
 
 class Pagination extends React.Component {
     constructor(props) {
@@ -35,41 +37,44 @@ class Pagination extends React.Component {
     }
 
     render () {
+        console.log("Pagination :: this.props : ", this.props)
+        let currentPage = this.props.currentPageIndex;
+
         return (
             <div>
                 <hr />
-                        
+
                 <Link 
-                    to={'/page/' + 1 } 
-                    //onClick={ (ev) => this.handleBeginningClick(ev) }                            
-                    className={ this.props.currentPageIndex === 1 ? 'button page disabled' : 'button page' }
+                    to={'/events/?page=' + 1 }                         
+                    className={ currentPage === 1 ? 'button page disabled' : 'button page' }
                 >
                     &laquo; Start 
                 </Link>&nbsp;
 
                 <Link 
-                    to={'/page/' + this.getPrevPageIndex() } 
-                    className={ this.props.currentPageIndex === 1 ? 'button page disabled' : 'button page' }
+                    to={'/events/?page=' + this.getPrevPageIndex() } 
+                    className={ currentPage === 1 ? 'button page disabled' : 'button page' }
                 >
                     &lt; Prev
                 </Link>&nbsp;
 
-                Page { this.props.currentPageIndex } / { this.getTotalPages() }
+                Page { currentPage } / { this.getTotalPages() }
                 &nbsp;
 
                 <Link 
-                    to={'/page/' + this.getNextPageIndex() } 
-                    className={ this.props.currentPageIndex === this.getTotalPages() ? 'button page disabled' : 'button page' }
+                    to={'/events/?page=' + this.getNextPageIndex() } 
+                    className={ currentPage === this.getTotalPages() ? 'button page disabled' : 'button page' }
                 >
                     Next &gt;
                 </Link>&nbsp;
 
                 <Link 
-                    to={'/page/' + this.getTotalPages() } 
-                    className={ this.props.currentPageIndex === this.getTotalPages() ? 'button page disabled' : 'button page' }
+                    to={'/events/?page=' + this.getTotalPages() } 
+                    className={ currentPage === this.getTotalPages() ? 'button page disabled' : 'button page' }
                 >
                     End &raquo;                        
                 </Link>
+
             </div>
         );
     }

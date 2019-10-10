@@ -12,7 +12,7 @@ class App extends Component {
                 <Router>
                     <Switch>
                         <Route
-                            path="/page/:number" 
+                            path="/events" // "/events/:number"
                             exact
                             component={EventsList}
                         />
@@ -26,7 +26,7 @@ class App extends Component {
                         <Redirect 
                             from='/'
                             exact
-                            to='/page/1' 
+                            to='/events' 
                         />
                         
                         <Route component={PageNotFound} />
