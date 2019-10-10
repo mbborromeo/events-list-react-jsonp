@@ -38,7 +38,7 @@ class EventsList extends React.Component {
     }
     
     getEvents( pageNum, searchKeyword ) {
-        console.log("getEvents!!!!!")
+        console.log("getEventS()")
         this.eventsService.getEvents( pageNum, searchKeyword )
             .then( response => {      
                 this.setState(
