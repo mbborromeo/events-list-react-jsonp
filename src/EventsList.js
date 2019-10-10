@@ -53,25 +53,28 @@ class EventsList extends React.Component< RouteComponentProps<any> > {
     }
     */
 
-    getCurrentPageIndex( properties ) { //: string
+    getCurrentPageIndex( properties ) { //: string        
         let search = this.getUrlParams( properties );
-        return parseInt( search.get("page") ) || 1; //if page param not found, return 1 for 1st page
+        let currentPageIndex = parseInt( search.get("page") ) || 1;
+
+        console.log("@@@@@@ EVENTSLIST:: getCurrentPageIndex : currentPageIndex : ", currentPageIndex)
+
+        return currentPageIndex; //if page param not found, return 1 for 1st page
     }
     
-    getUrlParams( properties ) { //: URLSearchParamsd
-        console.log("this.props is: ", properties)
-        console.log("this.props.location is: ", properties.location)
-        console.log("this.props.location.search: ", properties.location.search)
+    getUrlParams( properties ) { //: URLSearchParamsd              
 
         if( !properties.location.search ) {
+            console.log("getUrlParams :: this.props.location.search: ", properties.location.search);
             return new URLSearchParams();
         } else {
+            console.log("getUrlParams :: this.props.location.search: ", properties.location.search);
             return new URLSearchParams( properties.location.search );
-        }        
+        }       
     }
     
     getEvents( pageNum, searchKeyword ) {
-        console.log("getEventS()")
+        console.log("****** getEventS() pageNum is: ", pageNum)
         this.eventsService.getEvents( pageNum, searchKeyword )
             .then( response => {      
                 this.setState(
@@ -135,11 +138,11 @@ class EventsList extends React.Component< RouteComponentProps<any> > {
         let pageIndex = this.getCurrentPageIndex( this.props );
         const submittedFilterKeyword = this.getSubmittedFilterKeyword( this.state );
 
-        console.log("componentDidUpdate ::");
+        console.log("!!!!!!!!!!! componentDidUpdate ::");
         
         //if keyword is different from last search
         if( submittedFilterKeyword !== this.getSubmittedFilterKeyword( prevState ) ) {
-            console.log(" submittedFilterKeyword DIFFERNT - submittedFilterKeyword is: ", submittedFilterKeyword)   
+            console.log(" ~~~~~ submittedFilterKeyword DIFFERNT - submittedFilterKeyword is: ", submittedFilterKeyword)   
 
             //reset to first page of results
             pageIndex = 1; 
@@ -147,14 +150,13 @@ class EventsList extends React.Component< RouteComponentProps<any> > {
             //force update URL in browser
             console.log("want to reload with PAGE 1")
             //this.props.history.push('/page/1');
+            this.props.history.push('/events');
             
             this.getEvents( pageIndex, submittedFilterKeyword );         
         } else if( submittedFilterKeyword === this.getSubmittedFilterKeyword( prevState ) && pageIndex !== this.getCurrentPageIndex( prevProps ) ) {
-            console.log(" submittedFilterKeyword SAME, pageIndex DIFFERNT : pageIndex", pageIndex )
+            console.log(" ###### submittedFilterKeyword SAME, pageIndex DIFFERNT : pageIndex", pageIndex )
             this.getEvents( pageIndex, submittedFilterKeyword );
-        }  
-
-
+        }
     }
 
     render() {
