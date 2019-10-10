@@ -14,7 +14,7 @@ class EventsList extends React.Component {
             loading: true,
             events: [],
             filterKeyword: '',
-            previousFilterKeyword: '',
+            submittedFilterKeyword: '',
             totalPages: undefined,
         }
 
@@ -25,6 +25,7 @@ class EventsList extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeKeyword = this.handleChangeKeyword.bind(this);   
         this.handleCancel = this.handleCancel.bind(this);
+        this.getSubmittedFilterKeyword = this.getSubmittedFilterKeyword.bind(this);
     }
 
     getPageIndex(properties) {
@@ -37,6 +38,7 @@ class EventsList extends React.Component {
     }
     
     getEvents( pageNum, searchKeyword ) {
+        console.log("getEventS()")
         this.eventsService.getEvents( pageNum, searchKeyword )
             .then( response => {      
                 this.setState(
@@ -56,8 +58,8 @@ class EventsList extends React.Component {
         return this.state.filterKeyword.toLowerCase();
     }
 
-    getPreviousFilterKeyword() {
-        return this.state.previousFilterKeyword.toLowerCase();
+    getSubmittedFilterKeyword( state ) {
+        return state.submittedFilterKeyword.toLowerCase();
     }
     
     handleChangeKeyword(keyword) {
@@ -68,73 +70,57 @@ class EventsList extends React.Component {
 
     handleCancel() {
         //asynchronous state update/read
-        this.setState(
-            { filterKeyword: '' },
-            () => { //callback fires straight after filterKeyword has been updated                
-                const keyword = this.getFilterKeyword();
-                const previousKeyword = this.getPreviousFilterKeyword();
-                let pageIndex = undefined;
-
-                // need to reset pageIndex to 1 if searching for new keyword
-                if( keyword !== previousKeyword ) {                              
-                    pageIndex = 1;
-                    
-                    this.setState({
-                        previousFilterKeyword: keyword,
-                    });                         
-                    
-                    //force update URL in browser
-                    this.props.history.push('/page/1');
-
-                    //search events
-                    this.getEvents( pageIndex, keyword ); 
-                }
-            }
-        );
+        this.setState({ 
+            filterKeyword: '',
+            submittedFilterKeyword: '',
+        });
     }
     
     handleSubmit() {        
         const keyword = this.getFilterKeyword();
-        const previousKeyword = this.getPreviousFilterKeyword();
-        let pageIndex = undefined;
+        const submittedFilterKeyword = this.getSubmittedFilterKeyword( this.state ); //initially is blank ""
 
-        // need to reset pageIndex to 1 if searching for new keyword
-        if( keyword !== previousKeyword ) {                     
-            pageIndex = 1;
-                
+        //compare to last submitted filter keyword
+        if( keyword !== submittedFilterKeyword ) {   
             this.setState({
-                previousFilterKeyword: keyword,
+                submittedFilterKeyword: keyword,
             });
-
-            //force update URL in browser
-            this.props.history.push('/page/1');
-
-        } else {            
-            pageIndex = this.getPageIndex( this.props );
         }  
 
-        //search events
-        this.getEvents( pageIndex, keyword );  
+        //componentDidUpdate will render page accordingly
     }
     
     componentDidMount() {
         const pageIndex = this.getPageIndex( this.props );
         const keyword = this.getFilterKeyword();
 
+        console.log("componentDidMount")
         this.getEvents( pageIndex, keyword );
     }
 
-    componentDidUpdate(prevProps, prevState) {        
-        const pageIndex = this.getPageIndex( this.props );
-        const keyword = this.getFilterKeyword();
+    componentDidUpdate(prevProps, prevState) {
+        let pageIndex = this.getPageIndex( this.props );
+        const submittedFilterKeyword = this.getSubmittedFilterKeyword( this.state );
+        
+        //if keyword is different from last search
+        if( submittedFilterKeyword !== this.getSubmittedFilterKeyword( prevState ) ) {
+            console.log("componentDidUpdate :: submittedFilterKeyword DIFFERNT - submittedFilterKeyword is: ", submittedFilterKeyword)   
 
-        if( pageIndex !== this.getPageIndex( prevProps ) ){
-            this.getEvents( pageIndex, keyword );
-        }
+            //reset to first page of results
+            pageIndex = 1; 
+
+            //force update URL in browser
+            console.log("force page reload with PAGE 1")
+            this.props.history.push('/page/1');
+            
+            this.getEvents( pageIndex, submittedFilterKeyword );         
+        } else if( submittedFilterKeyword === this.getSubmittedFilterKeyword( prevState ) && pageIndex !== this.getPageIndex( prevProps ) ) {
+            console.log("componentDidUpdate :: submittedFilterKeyword SAME, pageIndex DIFFERNT : pageIndex", pageIndex )
+            this.getEvents( pageIndex, submittedFilterKeyword );
+        }  
     }
 
     render() {
-        //console.log("this.state", this.state);
         const pageIndex = this.getPageIndex( this.props );
 
         return (
