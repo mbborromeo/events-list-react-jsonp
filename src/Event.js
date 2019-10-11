@@ -134,6 +134,9 @@ class Event extends React.Component {
                         >
                             &lt; Back 
                         </Link>
+                        <br />
+
+                        <button onClick={ this.props.history.goBack }>Back 2</button>
                     </div>
                 }
             </div>
