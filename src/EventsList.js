@@ -6,7 +6,7 @@ import SearchField from './SearchField';
 import SearchResults from './SearchResults';
 import Pagination from './Pagination';
 
-function EventsList( props ) {
+function EventsList( props, state ) {
     //define State variables
     const [ loading, setLoading ] = useState( true );
     const [ events, setEvents ] = useState( [] );
@@ -28,21 +28,10 @@ function EventsList( props ) {
     function getEvents( pageNum, searchKeyword ) {
         console.log("getEventS()")
         eventsService.getEvents( pageNum, searchKeyword )
-            .then( response => {      
-                /*
-                this.setState(
-                    {
-                        events: response.data,
-                        totalPages: Math.floor( response.meta.total / Constants.EVENTS_PER_PAGE ) + 1,
-                        loading: false, 
-                    }
-                );
-                */
-
+            .then( response => {
                 setEvents( response.data );
                 setTotalPages( Math.floor( response.meta.total / Constants.EVENTS_PER_PAGE ) + 1 );
                 setLoading( false );
-
             })
             .catch( function (error) {
                 console.log(error);
@@ -53,11 +42,36 @@ function EventsList( props ) {
         return filterKeyword.toLowerCase();
     }
 
+    function getSubmittedFilterKeyword() { //state
+        return submittedFilterKeyword.toLowerCase(); //state.
+    }
+
+    function handleChangeKeyword(keyword) {
+        setFilterKeyword( keyword );
+    }
+
+    function handleCancel() {
+        setFilterKeyword( '' );
+        setSubmittedFilterKeyword( '' );
+    }
+    
+    function handleSubmit() {        
+        const keyword = getFilterKeyword();
+        const submittedFilterKeyword = getSubmittedFilterKeyword(); //state //initially is blank ""
+
+        //compare to last submitted filter keyword
+        if( keyword !== submittedFilterKeyword ) {
+           setSubmittedFilterKeyword( keyword );
+        }  
+
+        // useEffect/componentDidUpdate will render page accordingly
+    }
+
     const pageIndex = getPageIndex( props );
     const keyword = getFilterKeyword();
    
 
-    // Similar to componentDidMount and componentDidUpdate:   
+    // Similar to componentDidMount and componentDidUpdate in class components:   
     useEffect( 
         () => {
             console.log("useEffect!!!!");            
@@ -72,6 +86,13 @@ function EventsList( props ) {
                 <div>Loading events list</div> :
                 <div>
                     <h1>Events</h1>
+
+                    <SearchField 
+                        filterKeyword={ filterKeyword }
+                        onChangeKeyword={ handleChangeKeyword }
+                        onCancel={ handleCancel }
+                        onSubmit={ handleSubmit }
+                    />
 
                     <SearchResults
                         events={ events } 
