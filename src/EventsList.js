@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import * as Constants from './constants';
 import EventsService from './EventsService';
 //import { withRouter } from "react-router";
@@ -12,7 +12,10 @@ function EventsList( props, state ) {
     const [ events, setEvents ] = useState( [] );
     const [ filterKeyword, setFilterKeyword ] = useState( '' );    
     const [ submittedFilterKeyword, setSubmittedFilterKeyword ] = useState( '' );
-    const [ totalPages, setTotalPages ] = useState( undefined );    
+    const [ totalPages, setTotalPages ] = useState( undefined );  
+    
+    const pageIndex = getPageIndex( props );
+    const keyword = getFilterKeyword();
 
     const eventsService = new EventsService();
 
@@ -55,7 +58,7 @@ function EventsList( props, state ) {
         setSubmittedFilterKeyword( '' );
     }
     
-    function handleSubmit() {        
+    function handleSubmit() {      
         const keyword = getFilterKeyword();
         const submittedFilterKeyword = getSubmittedFilterKeyword(); //state //initially is blank ""
 
@@ -67,17 +70,13 @@ function EventsList( props, state ) {
         // useEffect/componentDidUpdate will render page accordingly
     }
 
-    const pageIndex = getPageIndex( props );
-    const keyword = getFilterKeyword();
-   
-
     // Similar to componentDidMount and componentDidUpdate in class components:   
     useEffect( 
         () => {
             console.log("useEffect!!!!");            
-            getEvents( pageIndex, keyword );
+            getEvents( pageIndex, submittedFilterKeyword ); //, keyword
         },
-        [pageIndex, keyword] // Only re-run the effect if these values change
+        [pageIndex, submittedFilterKeyword] //, keyword  // Only re-run the effect if these values change
     );
 
     return (
