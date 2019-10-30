@@ -45,8 +45,8 @@ function EventsList( props, state ) {
         return filterKeyword.toLowerCase();
     }
 
-    function getSubmittedFilterKeyword() { //state
-        return submittedFilterKeyword.toLowerCase(); //state.
+    function getSubmittedFilterKeyword() {
+        return submittedFilterKeyword.toLowerCase();
     }
 
     function handleChangeKeyword(keyword) {
@@ -72,11 +72,10 @@ function EventsList( props, state ) {
 
     // Similar to componentDidMount and componentDidUpdate in class components:   
     useEffect( 
-        () => {
-            console.log("useEffect!!!!");            
-            getEvents( pageIndex, submittedFilterKeyword ); //, keyword
+        () => {      
+            getEvents( pageIndex, submittedFilterKeyword );
         },
-        [pageIndex, submittedFilterKeyword] //, keyword  // Only re-run the effect if these values change
+        [pageIndex, submittedFilterKeyword] // Only re-run the effect if these values change
     );
 
     return (
