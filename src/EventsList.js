@@ -12,7 +12,7 @@ function EventsList( props, state ) {
     const [ events, setEvents ] = useState( [] );
     const [ filterKeyword, setFilterKeyword ] = useState( '' );    
     const [ submittedFilterKeyword, setSubmittedFilterKeyword ] = useState( '' );
-    const [ totalPages, setTotalPages ] = useState( undefined );  
+    const [ totalPages, setTotalPages ] = useState( 1 );  
     
     const pageIndex = getPageIndex( props );
     const keyword = getFilterKeyword();
@@ -64,7 +64,7 @@ function EventsList( props, state ) {
 
         //compare to last submitted filter keyword
         if( keyword !== submittedFilterKeyword ) {
-           setSubmittedFilterKeyword( keyword );
+            setSubmittedFilterKeyword( keyword );
         }  
 
         // useEffect/componentDidUpdate will render page accordingly
@@ -75,7 +75,7 @@ function EventsList( props, state ) {
         () => {      
             getEvents( pageIndex, submittedFilterKeyword );
         },
-        [pageIndex, submittedFilterKeyword] // Only re-run the effect if these values change
+        [getEvents, pageIndex, submittedFilterKeyword] // Only re-run the effect if these values change
     );
 
     return (
@@ -94,7 +94,12 @@ function EventsList( props, state ) {
 
                     <SearchResults
                         events={ events } 
-                    />   
+                    />
+
+                    <Pagination 
+                        currentPageIndex={ pageIndex }
+                        totalPages={ totalPages }                            
+                    />
                 </div>
             }        
         </div>
