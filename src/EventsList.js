@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import * as Constants from './constants';
 import EventsService from './EventsService';
 //import { withRouter } from "react-router";
 import SearchField from './SearchField';
 import SearchResults from './SearchResults';
 import Pagination from './Pagination';
+import Timer from './Timer';
 
 function EventsList( props, state ) {
     //define State variables
@@ -60,7 +61,7 @@ function EventsList( props, state ) {
     
     function handleSubmit() {      
         const keyword = getFilterKeyword();
-        const submittedFilterKeyword = getSubmittedFilterKeyword(); //state //initially is blank ""
+        const submittedFilterKeyword = getSubmittedFilterKeyword(); //initially is blank ""
 
         //compare to last submitted filter keyword
         if( keyword !== submittedFilterKeyword ) {
@@ -79,7 +80,9 @@ function EventsList( props, state ) {
     );
 
     return (
-        <div>
+        <div>   
+            <Timer />
+
             { loading ?
                 <div>Loading events list</div> :
                 <div>
