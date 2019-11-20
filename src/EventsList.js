@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react'; // , useCallback
 import * as Constants from './constants';
 import EventsService from './EventsService';
 //import { withRouter } from "react-router";
@@ -6,29 +6,19 @@ import SearchField from './SearchField';
 import SearchResults from './SearchResults';
 import Pagination from './Pagination';
 
-class EventsList extends React.Component {    
-    constructor(props) {
-        super(props);
+function EventsList( props ) {
+    //define State variables
+    const [ loading, setLoading ] = useState( true );
+    const [ events, setEvents ] = useState( [] );
+    const [ filterKeyword, setFilterKeyword ] = useState( '' );    
+    const [ submittedFilterKeyword, setSubmittedFilterKeyword ] = useState( '' );
+    const [ totalPages, setTotalPages ] = useState( 1 );  
+    
+    const pageIndex = getPageIndex( props );
 
-        this.state = {
-            loading: true,
-            events: [],
-            filterKeyword: '',
-            submittedFilterKeyword: '',
-            totalPages: undefined,
-        }
+    const eventsService = new EventsService();
 
-        this.eventsService = new EventsService();
-
-        this.getPageIndex = this.getPageIndex.bind(this);
-        this.getFilterKeyword = this.getFilterKeyword.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChangeKeyword = this.handleChangeKeyword.bind(this);   
-        this.handleCancel = this.handleCancel.bind(this);
-        this.getSubmittedFilterKeyword = this.getSubmittedFilterKeyword.bind(this);
-    }
-
-    getPageIndex(properties) {
+    function getPageIndex(properties) {
         //get page number from URL, not State
         if(properties.match.params.number){
             return parseInt(properties.match.params.number);
@@ -37,124 +27,82 @@ class EventsList extends React.Component {
         }
     }
     
-    getEvents( pageNum, searchKeyword ) {
+    function getEvents( pageNum, searchKeyword ) {
         console.log("getEventS()")
-        this.eventsService.getEvents( pageNum, searchKeyword )
-            .then( response => {      
-                this.setState(
-                    {
-                        events: response.data,
-                        totalPages: Math.floor( response.meta.total / Constants.EVENTS_PER_PAGE ) + 1,
-                        loading: false, 
-                    }
-                );
+        eventsService.getEvents( pageNum, searchKeyword )
+            .then( response => {
+                setEvents( response.data );
+                setTotalPages( Math.floor( response.meta.total / Constants.EVENTS_PER_PAGE ) + 1 );
+                setLoading( false );
             })
             .catch( function (error) {
                 console.log(error);
             });
     }
 
-    getFilterKeyword() {
-        return this.state.filterKeyword.toLowerCase();
+    function getFilterKeyword() {
+        return filterKeyword.toLowerCase();
     }
 
-    getSubmittedFilterKeyword( state ) {
-        return state.submittedFilterKeyword.toLowerCase();
-    }
-    
-    handleChangeKeyword(keyword) {
-        this.setState({                 
-            filterKeyword: keyword,
-        });
+    function getSubmittedFilterKeyword() {
+        return submittedFilterKeyword.toLowerCase();
     }
 
-    handleCancel() {
-        //asynchronous state update/read
-        this.setState({ 
-            filterKeyword: '',
-            submittedFilterKeyword: '',
-        });
+    function handleChangeKeyword(keyword) {
+        setFilterKeyword( keyword );
+    }
+
+    function handleCancel() {
+        setFilterKeyword( '' );
+        setSubmittedFilterKeyword( '' );
     }
     
-    handleSubmit() {        
-        const keyword = this.getFilterKeyword();
-        const submittedFilterKeyword = this.getSubmittedFilterKeyword( this.state ); //initially is blank ""
+    function handleSubmit() {      
+        const keyword = getFilterKeyword();
+        const submittedFilterKeyword = getSubmittedFilterKeyword(); //initially is blank ""
 
         //compare to last submitted filter keyword
-        if( keyword !== submittedFilterKeyword ) {   
-            this.setState({
-                submittedFilterKeyword: keyword,
-            });
+        if( keyword !== submittedFilterKeyword ) {
+            setSubmittedFilterKeyword( keyword );
         }  
 
-        //componentDidUpdate will render page accordingly
-    }
-    
-    componentDidMount() {
-        const pageIndex = this.getPageIndex( this.props );
-        const keyword = this.getFilterKeyword();
-
-        console.log("componentDidMount")
-        this.getEvents( pageIndex, keyword );
+        // useEffect/componentDidUpdate will render page accordingly
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        let pageIndex = this.getPageIndex( this.props );
-        const submittedFilterKeyword = this.getSubmittedFilterKeyword( this.state );
-        
-        //if keyword is different from last search
-        if( submittedFilterKeyword !== this.getSubmittedFilterKeyword( prevState ) ) {
-            console.log("componentDidUpdate :: submittedFilterKeyword DIFFERNT - submittedFilterKeyword is: ", submittedFilterKeyword)   
+    // Similar to componentDidMount and componentDidUpdate in class components:   
+    useEffect( 
+        () => {      
+            getEvents( pageIndex, submittedFilterKeyword );
+        },
+        [getEvents, pageIndex, submittedFilterKeyword] // Only re-run the effect if these values change
+    );
 
-            //reset to first page of results
-            pageIndex = 1; 
+    return (
+        <div>   
+            { loading ?
+                <div>Loading events list</div> :
+                <div>
+                    <h1>Events</h1>
 
-            //force update URL in browser
-            console.log("force page reload with PAGE 1")
-            this.props.history.push('/page/1');
-            
-            this.getEvents( pageIndex, submittedFilterKeyword );         
-        } else if( submittedFilterKeyword === this.getSubmittedFilterKeyword( prevState ) && pageIndex !== this.getPageIndex( prevProps ) ) {
-            console.log("componentDidUpdate :: submittedFilterKeyword SAME, pageIndex DIFFERNT : pageIndex", pageIndex )
-            this.getEvents( pageIndex, submittedFilterKeyword );
-        }  
-    }
+                    <SearchField 
+                        filterKeyword={ filterKeyword }
+                        onChangeKeyword={ handleChangeKeyword }
+                        onCancel={ handleCancel }
+                        onSubmit={ handleSubmit }
+                    />
 
-    render() {
-        const pageIndex = this.getPageIndex( this.props );
+                    <SearchResults
+                        events={ events } 
+                    />
 
-        return (
-            <div>
-                { this.state.loading ?
-                    <div>Loading events list</div> :
-                    <div>
-                        <h1>Events</h1>
-
-                        <SearchField 
-                            filterKeyword={ this.state.filterKeyword }
-                            onChangeKeyword={ this.handleChangeKeyword }
-                            onCancel={ this.handleCancel }
-                            onSubmit={ this.handleSubmit }
-                        />
-
-                        <SearchResults
-                            events={ this.state.events } 
-                        />    
-
-                        <Pagination 
-                            currentPageIndex={ pageIndex }
-                            totalPages={ this.state.totalPages }                            
-                        />
-                    </div>
-                }        
-            </div>
-        );
-    }
+                    <Pagination 
+                        currentPageIndex={ pageIndex }
+                        totalPages={ totalPages }                            
+                    />
+                </div>
+            }        
+        </div>
+    );
 }
-
-/*
-// Create a new component that is "connected" (to borrow redux terminology) to the router.
-const EventsListWithRouter = withRouter( EventsList );
-*/
 
 export default EventsList;

@@ -1,9 +1,15 @@
 {
   "extends": "react-app",
-    //"plugins": ["prettier"],
+    "plugins": [
+      //"prettier",
+      "react-hooks"    
+    ],
     //"parser": "babel-eslint",
     "rules": {
       "react/jsx-filename-extension": "off",
-      "indent": ["error", 4]
+      "indent": ["error", 4],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
     }
   }
+  
