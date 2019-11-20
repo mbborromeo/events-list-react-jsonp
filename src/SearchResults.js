@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import DateTimeFromTo from './DateTimeFromTo';
 import './SearchResults.scss';
 
-class SearchResults extends React.Component {
+class SearchResults extends Component {
     render () {
         return (
             <div>

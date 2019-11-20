@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import DateTimeFromTo from './DateTimeFromTo';
 import './Event.scss';
 
-class Event extends React.Component {
+class Event extends Component {
     constructor(props) {
         super(props);        
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // , useCallback
+import React, { useState, useEffect, useCallback } from 'react';
 import * as Constants from './constants';
 import EventsService from './EventsService';
 //import { withRouter } from "react-router";
@@ -27,18 +27,23 @@ function EventsList( props ) {
         }
     }
     
-    function getEvents( pageNum, searchKeyword ) {
-        console.log("getEventS()")
-        eventsService.getEvents( pageNum, searchKeyword )
-            .then( response => {
-                setEvents( response.data );
-                setTotalPages( Math.floor( response.meta.total / Constants.EVENTS_PER_PAGE ) + 1 );
-                setLoading( false );
-            })
-            .catch( function (error) {
-                console.log(error);
-            });
-    }
+    // when you wrap a useCallback() hook around a function, the function inside it doesn't re-render 
+    const getEvents = useCallback(
+        ( pageNum, searchKeyword ) => {
+            console.log("getEventS()");
+
+            eventsService.getEvents( pageNum, searchKeyword )
+                .then( response => {
+                    setEvents( response.data );
+                    setTotalPages( Math.floor( response.meta.total / Constants.EVENTS_PER_PAGE ) + 1 );
+                    setLoading( false );
+                })
+                .catch( function (error) {
+                    console.log(error);
+                });
+        },
+        [eventsService] // dependencies that require a re-render for
+    )
 
     function getFilterKeyword() {
         return filterKeyword.toLowerCase();

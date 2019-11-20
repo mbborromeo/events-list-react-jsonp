@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class SearchField extends React.Component {
+class SearchField extends Component {
     constructor(props) {
         super(props);
 

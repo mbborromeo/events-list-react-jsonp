@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-class Pagination extends React.Component {
+class Pagination extends Component {
     constructor(props) {
         super(props);
 

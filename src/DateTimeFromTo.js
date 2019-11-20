@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as Constants from './constants';
 
-class DateTimeFromTo extends React.Component {    
+class DateTimeFromTo extends Component {    
     constructor(props) {
         super(props);
         
