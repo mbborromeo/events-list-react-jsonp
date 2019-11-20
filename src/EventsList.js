@@ -5,7 +5,6 @@ import EventsService from './EventsService';
 import SearchField from './SearchField';
 import SearchResults from './SearchResults';
 import Pagination from './Pagination';
-import Timer from './Timer';
 
 function EventsList( props, state ) {
     //define State variables
@@ -81,8 +80,6 @@ function EventsList( props, state ) {
 
     return (
         <div>   
-            <Timer />
-
             { loading ?
                 <div>Loading events list</div> :
                 <div>
