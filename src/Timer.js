@@ -32,6 +32,7 @@ function Timer() {
         console.log('onStopClick')
     }
 
+    // when you use useCallback(), these functions don't re-render 
     const onPauseClick = useCallback(
         () => {
             console.log('onPauseClick')

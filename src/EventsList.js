@@ -16,7 +16,7 @@ function EventsList( props, state ) {
     const [ totalPages, setTotalPages ] = useState( 1 );  
     
     const pageIndex = getPageIndex( props );
-    const keyword = getFilterKeyword();
+    //const keyword = getFilterKeyword();
 
     const eventsService = new EventsService();
 
