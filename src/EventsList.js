@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import React, { useState, useEffect } from 'react'; // , useCallback
 import * as Constants from './constants';
 import EventsService from './EventsService';
 //import { withRouter } from "react-router";
@@ -6,7 +6,7 @@ import SearchField from './SearchField';
 import SearchResults from './SearchResults';
 import Pagination from './Pagination';
 
-function EventsList( props, state ) {
+function EventsList( props ) {
     //define State variables
     const [ loading, setLoading ] = useState( true );
     const [ events, setEvents ] = useState( [] );
@@ -15,7 +15,6 @@ function EventsList( props, state ) {
     const [ totalPages, setTotalPages ] = useState( 1 );  
     
     const pageIndex = getPageIndex( props );
-    //const keyword = getFilterKeyword();
 
     const eventsService = new EventsService();
 
