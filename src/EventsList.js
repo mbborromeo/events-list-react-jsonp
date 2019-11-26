@@ -85,7 +85,7 @@ function EventsList( props ) {
                 setSubmittedFilterKeyword( keyword );
             }
         },
-        [filterKeyword]
+        [filterKeyword, submittedFilterKeyword]
     );
     
     // Similar to componentDidMount and componentDidUpdate in class components:   
