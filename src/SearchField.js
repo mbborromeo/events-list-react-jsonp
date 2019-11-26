@@ -6,6 +6,7 @@ class SearchField extends Component {
 
         this.handleChangeKeyword = this.handleChangeKeyword.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChangeKeyword(event){
@@ -25,7 +26,7 @@ class SearchField extends Component {
     render () {
         return (
             <div>
-                <form onSubmit={ this.handleSubmit.bind(this) }>
+                <form onSubmit={ this.handleSubmit }>
                     <label>
                         Title: 
                         <input type="text" name="keyword"

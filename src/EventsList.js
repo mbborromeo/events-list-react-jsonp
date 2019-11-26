@@ -30,8 +30,6 @@ function EventsList( props ) {
     // when you wrap a useCallback() hook around a function, the function inside it doesn't re-render 
     const getEvents = useCallback(
         ( pageNum, searchKeyword ) => {
-            console.log("getEventS()");
-
             eventsService.getEvents( pageNum, searchKeyword )
                 .then( response => {
                     setEvents( response.data );
@@ -43,37 +41,53 @@ function EventsList( props ) {
                 });
         },
         [eventsService] // dependencies that require a re-render for
-    )
-
-    function getFilterKeyword() {
-        return filterKeyword.toLowerCase();
-    }
-
-    function getSubmittedFilterKeyword() {
-        return submittedFilterKeyword.toLowerCase();
-    }
-
+    );
+    
     function handleChangeKeyword(keyword) {
         setFilterKeyword( keyword );
-    }
+    }    
+    /*
+    const handleChangeKeyword = useCallback(
+        (e) => {
+            console.log("handle Change Keyword!!")
+            //setFilterKeyword(e.target.value)
+            setFilterKeyword(filterKeyword)
+        },
+        [filterKeyword]
+    )
+    */
 
     function handleCancel() {
         setFilterKeyword( '' );
         setSubmittedFilterKeyword( '' );
     }
     
+    /*
     function handleSubmit() {      
-        const keyword = getFilterKeyword();
-        const submittedFilterKeyword = getSubmittedFilterKeyword(); //initially is blank ""
+        const keyword = filterKeyword.toLowerCase();
+        const submittedKeyword = submittedFilterKeyword.toLowerCase(); //initially is blank ""
 
         //compare to last submitted filter keyword
-        if( keyword !== submittedFilterKeyword ) {
+        if( keyword !== submittedKeyword ) {
             setSubmittedFilterKeyword( keyword );
         }  
 
         // useEffect/componentDidUpdate will render page accordingly
     }
+    */   
+    const handleSubmit = useCallback( 
+        () => {
+            const keyword = filterKeyword.toLowerCase();
+            const submittedKeyword = submittedFilterKeyword.toLowerCase(); //initially is blank ""
 
+            //compare to last submitted filter keyword
+            if( keyword !== submittedKeyword ) {
+                setSubmittedFilterKeyword( keyword );
+            }
+        },
+        [filterKeyword]
+    );
+    
     // Similar to componentDidMount and componentDidUpdate in class components:   
     useEffect( 
         () => {      
