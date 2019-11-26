@@ -43,20 +43,6 @@ function EventsList( props ) {
         [eventsService] // dependencies that require a re-render for
     );
     
-    function handleChangeKeyword(keyword) {
-        setFilterKeyword( keyword );
-    }    
-    /*
-    const handleChangeKeyword = useCallback(
-        (e) => {
-            console.log("handle Change Keyword!!")
-            //setFilterKeyword(e.target.value)
-            setFilterKeyword(filterKeyword)
-        },
-        [filterKeyword]
-    )
-    */
-
     function handleCancel() {
         setFilterKeyword( '' );
         setSubmittedFilterKeyword( '' );
@@ -105,7 +91,7 @@ function EventsList( props ) {
 
                     <SearchField 
                         filterKeyword={ filterKeyword }
-                        onChangeKeyword={ handleChangeKeyword }
+                        onChangeKeyword={ setFilterKeyword } // handleChangeKeyword
                         onCancel={ handleCancel }
                         onSubmit={ handleSubmit }
                     />
