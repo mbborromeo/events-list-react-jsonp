@@ -16,6 +16,7 @@ function EventsList( props ) {
     
     const pageIndex = getPageIndex( props );
 
+    //const eventsService = new EventsService();
     // useMemo will save a memoized copy of the function for re-use, instead of creating a new function each time    
     const eventsService = useMemo(
         () => new EventsService(), 
@@ -34,12 +35,12 @@ function EventsList( props ) {
     // when you wrap a useCallback() hook around a function, the function inside it doesn't re-render 
     const getEvents = useCallback(
         ( pageNum, searchKeyword ) => {
-            console.log("before eventsService.getEvents() call: eventsService", eventsService )
+            console.log("BEFORE eventsService.getEvents() : loading", loading )
             eventsService.getEvents( pageNum, searchKeyword )
                 .then( response => {
                     setEvents( response.data );
                     setTotalPages( Math.floor( response.meta.total / Constants.EVENTS_PER_PAGE ) + 1 );
-                    setLoading( false );
+                    setLoading( false );                    
                 })
                 .catch( function (error) {
                     console.log(error);
@@ -69,10 +70,11 @@ function EventsList( props ) {
     // Similar to componentDidMount and componentDidUpdate in class components:   
     useEffect( 
         () => {   
-            console.log("useEffect calling getEvents() : getEvents", getEvents )   
+            console.log("BEFORE useEffect calling local getEvents() : loading", loading )   
             getEvents( pageIndex, submittedFilterKeyword );
+            console.log("AFTER useEffect calling local getEvents() : loading", loading)
         },
-        [getEvents, pageIndex, submittedFilterKeyword] // Only re-run the effect if these values change
+        [getEvents, pageIndex, submittedFilterKeyword] // Only re-run the effect if these values change: 
     );
 
     return (
