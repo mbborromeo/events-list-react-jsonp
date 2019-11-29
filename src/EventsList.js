@@ -35,7 +35,7 @@ function EventsList( props ) {
     // when you wrap a useCallback() hook around a function, the function inside it doesn't re-render 
     const getEvents = useCallback(
         ( pageNum, searchKeyword ) => {
-            console.log("BEFORE eventsService.getEvents() : loading", loading )
+            console.log("2. BEFORE eventsService.getEvents() : loading", loading )
             eventsService.getEvents( pageNum, searchKeyword )
                 .then( response => {
                     setEvents( response.data );
@@ -46,7 +46,7 @@ function EventsList( props ) {
                     console.log(error);
                 });
         },
-        [eventsService] // dependencies that require a re-render for
+        [eventsService, loading] // dependencies that require a re-render for
     );
     
     function handleCancel() {
@@ -70,9 +70,9 @@ function EventsList( props ) {
     // Similar to componentDidMount and componentDidUpdate in class components:   
     useEffect( 
         () => {   
-            console.log("BEFORE useEffect calling local getEvents() : loading", loading )   
+            console.log("1. BEFORE useEffect calling local getEvents() : loading", loading )   
             getEvents( pageIndex, submittedFilterKeyword );
-            console.log("AFTER useEffect calling local getEvents() : loading", loading)
+            console.log("4. AFTER useEffect calling local getEvents() : loading", loading)
         },
         [getEvents, pageIndex, submittedFilterKeyword] // Only re-run the effect if these values change: 
     );
