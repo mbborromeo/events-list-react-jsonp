@@ -36,8 +36,7 @@ function EventsList( props ) {
     const getEvents = useCallback(
         ( pageNum, searchKeyword ) => {
             console.log("2. BEFORE eventsService.getEvents() : loading", loading )
-            setLoading( true );
-
+            
             eventsService.getEvents( pageNum, searchKeyword )
                 .then( response => {
                     setEvents( response.data );
@@ -72,11 +71,13 @@ function EventsList( props ) {
     // Similar to componentDidMount and componentDidUpdate in class components:   
     useEffect( 
         () => {   
-            console.log("1. BEFORE useEffect calling local getEvents() : loading", loading )   
+            console.log("1. BEFORE useEffect calling local getEvents() : loading", loading ) 
+            setLoading( true );
+  
             getEvents( pageIndex, submittedFilterKeyword );
             console.log("4. AFTER useEffect calling local getEvents() : loading", loading)
         },
-        [getEvents, pageIndex, submittedFilterKeyword] // Only re-run the effect if these values change: 
+        [getEvents, pageIndex, submittedFilterKeyword, loading] // Only re-run the effect if these values change: 
     );
 
     return (
