@@ -8,7 +8,7 @@ import Pagination from './Pagination';
 
 function EventsList( props ) {
     //define State variables
-    const [ loading, setLoading ] = useState( true );
+    const [ loading, setLoading ] = useState( false );
     const [ events, setEvents ] = useState( [] );
     const [ filterKeyword, setFilterKeyword ] = useState( '' );    
     const [ submittedFilterKeyword, setSubmittedFilterKeyword ] = useState( '' );
@@ -36,6 +36,8 @@ function EventsList( props ) {
     const getEvents = useCallback(
         ( pageNum, searchKeyword ) => {
             console.log("2. BEFORE eventsService.getEvents() : loading", loading )
+            setLoading( true );
+
             eventsService.getEvents( pageNum, searchKeyword )
                 .then( response => {
                     setEvents( response.data );
