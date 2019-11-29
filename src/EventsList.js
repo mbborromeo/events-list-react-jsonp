@@ -9,6 +9,8 @@ import Pagination from './Pagination';
 function EventsList( props ) {
     //define State variables
     const [ loading, setLoading ] = useState( false );
+    console.log("loading is: ", loading)
+    
     const [ events, setEvents ] = useState( [] );
     const [ filterKeyword, setFilterKeyword ] = useState( '' );    
     const [ submittedFilterKeyword, setSubmittedFilterKeyword ] = useState( '' );
@@ -35,7 +37,8 @@ function EventsList( props ) {
     // when you wrap a useCallback() hook around a function, the function inside it doesn't re-render 
     const getEvents = useCallback(
         ( pageNum, searchKeyword ) => {
-            console.log("2. BEFORE eventsService.getEvents() : loading", loading )
+            console.log("2. BEFORE eventsService.getEvents()" )
+            setLoading( true );
             
             eventsService.getEvents( pageNum, searchKeyword )
                 .then( response => {
@@ -47,7 +50,7 @@ function EventsList( props ) {
                     console.log(error);
                 });
         },
-        [eventsService, loading] // dependencies that require a re-render for
+        [eventsService] // dependencies that require a re-render for
     );
     
     function handleCancel() {
@@ -71,13 +74,11 @@ function EventsList( props ) {
     // Similar to componentDidMount and componentDidUpdate in class components:   
     useEffect( 
         () => {   
-            console.log("1. BEFORE useEffect calling local getEvents() : loading", loading ) 
-            setLoading( true );
-  
+            console.log("1. BEFORE useEffect calling local getEvents()" )
             getEvents( pageIndex, submittedFilterKeyword );
-            console.log("4. AFTER useEffect calling local getEvents() : loading", loading)
+            console.log("4. AFTER useEffect calling local getEvents()")
         },
-        [getEvents, pageIndex, submittedFilterKeyword, loading] // Only re-run the effect if these values change: 
+        [getEvents, pageIndex, submittedFilterKeyword] // Only re-run the effect if these values change: 
     );
 
     return (
