@@ -1,5 +1,9 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Known bugs
+
+- If you are on a certain page number, and you search for a new keyword, it stays on that same page number instead of resetting to page 1.
+
 ## Available Scripts
 
 In the project directory, you can run:
